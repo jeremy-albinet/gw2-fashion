@@ -28,6 +28,8 @@
 	let editNotes = $state('');
 	let editTags = $state('');
 	let editImages = $state<{ file: File; preview: string }[]>([]);
+	let editSaving = $state(false);
+	let editError = $state<string | null>(null);
 
 	onMount(async () => {
 		const o = await getOutfit(id);
@@ -46,25 +48,34 @@
 		editNotes = outfit.notes;
 		editTags = outfit.tags.join(', ');
 		editImages = [];
+		editError = null;
 		editing = true;
 	}
 
 	async function saveEdit() {
-		if (!outfit) return;
-		const tags = editTags.split(',').map((t) => t.trim()).filter(Boolean);
-		const newImageIds = await Promise.all(editImages.map((img) => saveImage(img.file)));
-		const imageIds = [...(outfit.imageIds ?? []), ...newImageIds];
-		const updated = await updateOutfit(outfit.id, {
-			name: editName.trim() || 'Untitled',
-			race: editRace,
-			gender: editGender,
-			profession: editProfession,
-			notes: editNotes.trim(),
-			tags,
-			imageIds
-		});
-		if (updated) outfit = updated;
-		editing = false;
+		if (!outfit || editSaving) return;
+		editSaving = true;
+		editError = null;
+		try {
+			const tags = editTags.split(',').map((t) => t.trim()).filter(Boolean);
+			const newImageIds = await Promise.all(editImages.map((img) => saveImage(img.file)));
+			const imageIds = [...(outfit.imageIds ?? []), ...newImageIds];
+			const updated = await updateOutfit(outfit.id, {
+				name: editName.trim() || 'Untitled',
+				race: editRace,
+				gender: editGender,
+				profession: editProfession,
+				notes: editNotes.trim(),
+				tags,
+				imageIds
+			});
+			if (updated) outfit = updated;
+			editing = false;
+		} catch (e) {
+			editError = e instanceof Error ? e.message : 'Save failed.';
+		} finally {
+			editSaving = false;
+		}
 	}
 
 	async function removeImage(imageId: string) {
@@ -144,8 +155,11 @@
 				<ImageUploader bind:images={editImages} maxImages={8 - (outfit.imageIds?.length ?? 0)} />
 			</div>
 
+			{#if editError}
+				<div class="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded px-3 py-2">{editError}</div>
+			{/if}
 			<div class="flex gap-2">
-				<button onclick={saveEdit} class="bg-[var(--color-accent)] text-[var(--color-bg)] font-semibold px-4 py-1.5 rounded text-sm hover:bg-[var(--color-accent-strong)] transition-colors">Save</button>
+				<button onclick={saveEdit} disabled={editSaving} class="bg-[var(--color-accent)] text-[var(--color-bg)] font-semibold px-4 py-1.5 rounded text-sm hover:bg-[var(--color-accent-strong)] transition-colors disabled:opacity-50">{editSaving ? 'Saving…' : 'Save'}</button>
 				<button onclick={() => { editing = false; }} class="border border-[var(--color-border)] text-[var(--color-text-dim)] px-4 py-1.5 rounded text-sm hover:border-[var(--color-text-dim)] transition-colors">Cancel</button>
 			</div>
 		</div>

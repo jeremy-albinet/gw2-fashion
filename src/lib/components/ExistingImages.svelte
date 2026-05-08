@@ -9,18 +9,31 @@
 		onRemove: (id: string) => void;
 	} = $props();
 
-	let urls = $state<Map<string, string>>(new Map());
+	let urlMap = $state<Record<string, string>>({});
 
 	$effect(() => {
-		const prev = new Map(urls);
-		urls = new Map();
-		for (const id of imageIds) {
-			getImage(id).then((blob) => {
-				if (blob) urls = new Map([...urls, [id, URL.createObjectURL(blob)]]);
-			});
-		}
+		const ids = [...imageIds];
+		let alive = true;
+		let created: string[] = [];
+
+		Promise.all(
+			ids.map(async (id) => {
+				const blob = await getImage(id);
+				return { id, url: blob ? URL.createObjectURL(blob) : null };
+			})
+		).then((entries) => {
+			if (!alive) return;
+			const next: Record<string, string> = {};
+			for (const { id, url } of entries) {
+				if (url) { next[id] = url; created.push(url); }
+			}
+			urlMap = next;
+		});
+
 		return () => {
-			for (const u of prev.values()) URL.revokeObjectURL(u);
+			alive = false;
+			for (const url of created) URL.revokeObjectURL(url);
+			created = [];
 		};
 	});
 </script>
@@ -28,8 +41,8 @@
 <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
 	{#each imageIds as id}
 		<div class="relative group aspect-square rounded overflow-hidden border border-[var(--color-border)]">
-			{#if urls.get(id)}
-				<img src={urls.get(id)} alt="Screenshot" class="w-full h-full object-cover" />
+			{#if urlMap[id]}
+				<img src={urlMap[id]} alt="Screenshot" class="w-full h-full object-cover" />
 			{:else}
 				<div class="w-full h-full bg-[var(--color-bg-elev)] animate-pulse"></div>
 			{/if}
