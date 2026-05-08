@@ -4,20 +4,21 @@
 	import { page } from '$app/state';
 	import {
 		getOutfit, updateOutfit, deleteOutfit, encodeSharePayload,
-		saveImage, deleteImages, type StoredOutfit
+		saveImage, deleteImages, type StoredOutfit, type OutfitInfusions
 	} from '$lib/storage';
 	import { decodeFashionTemplate } from '$lib/gw2/decoder';
 	import TemplateViewer from '$lib/components/TemplateViewer.svelte';
 	import ImageGallery from '$lib/components/ImageGallery.svelte';
 	import ImageUploader from '$lib/components/ImageUploader.svelte';
 	import ExistingImages from '$lib/components/ExistingImages.svelte';
-	import type { FashionTemplate } from '$lib/gw2/types';
+	import type { FashionTemplate, ArmorSlotId, WeaponSlotId } from '$lib/gw2/types';
 	import { RACES, GENDERS, PROFESSIONS, type Race, type Gender, type Profession } from '$lib/gw2/constants';
 
 	const id = $derived(page.params.id ?? '');
 
 	let outfit = $state<StoredOutfit | null>(null);
 	let template = $state<FashionTemplate | null>(null);
+	let infusions = $state<OutfitInfusions>({ armor: {}, weapons: {} });
 	let shareUrl = $state('');
 	let copied = $state(false);
 	let editing = $state(false);
@@ -36,8 +37,37 @@
 		if (!o) { goto('/'); return; }
 		outfit = o;
 		template = decodeFashionTemplate(o.code);
+		infusions = o.infusions ?? { armor: {}, weapons: {} };
 		shareUrl = `${window.location.origin}/view#${encodeSharePayload(o)}`;
 	});
+
+	async function handleInfusionChange(slot: ArmorSlotId | WeaponSlotId, slotIndex: number, itemId: number) {
+		if (!outfit) return;
+		const isWeapon = ['aquaA', 'aquaB', 'setA1', 'setA2', 'setB1', 'setB2'].includes(slot);
+		let updated: OutfitInfusions;
+		if (isWeapon) {
+			const wSlot = slot as WeaponSlotId;
+			const current = infusions.weapons[wSlot] ?? [0, 0];
+			const slots = [...current] as [number, number];
+			slots[slotIndex] = itemId;
+			updated = { ...infusions, weapons: { ...infusions.weapons, [wSlot]: slots } };
+		} else {
+			const aSlot = slot as ArmorSlotId;
+			const current = infusions.armor[aSlot] ?? [0, 0, 0];
+			const slots = [...current] as [number, number, number];
+			slots[slotIndex] = itemId;
+			updated = { ...infusions, armor: { ...infusions.armor, [aSlot]: slots } };
+		}
+		infusions = updated;
+		const hasInfusions =
+			Object.values(updated.armor).some((v) => v?.some((id) => id > 0)) ||
+			Object.values(updated.weapons).some((v) => v?.some((id) => id > 0));
+		const savedOutfit = await updateOutfit(outfit.id, { infusions: hasInfusions ? updated : undefined });
+		if (savedOutfit) {
+			outfit = savedOutfit;
+			shareUrl = `${window.location.origin}/view#${encodeSharePayload(savedOutfit)}`;
+		}
+	}
 
 	function startEdit() {
 		if (!outfit) return;
@@ -194,7 +224,7 @@
 		<ImageGallery imageIds={outfit.imageIds} />
 	{/if}
 
-	<TemplateViewer {template} />
+	<TemplateViewer {template} {infusions} onInfusionChange={handleInfusionChange} />
 
 	<div class="mt-8 border-t border-[var(--color-border)] pt-6">
 		<h2 class="text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest mb-3">Share</h2>

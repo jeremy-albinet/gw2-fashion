@@ -4,6 +4,7 @@
 	import { decodeFashionTemplate } from '$lib/gw2/decoder';
 	import TemplateViewer from '$lib/components/TemplateViewer.svelte';
 	import type { FashionTemplate } from '$lib/gw2/types';
+	import type { OutfitInfusions } from '$lib/storage';
 	import { goto } from '$app/navigation';
 
 	let template = $state<FashionTemplate | null>(null);
@@ -13,6 +14,7 @@
 	let race = $state('');
 	let gender = $state('');
 	let profession = $state('');
+	let infusions = $state<OutfitInfusions | undefined>(undefined);
 	let error = $state<string | null>(null);
 	let saving = $state(false);
 
@@ -35,6 +37,7 @@
 			race = payload.race ?? '';
 			gender = payload.gender ?? '';
 			profession = payload.profession ?? '';
+			infusions = payload.infusions ?? undefined;
 		} catch (e) {
 			error = e instanceof Error ? e.message : 'Decode failed.';
 		}
@@ -43,7 +46,11 @@
 	async function saveToArmory() {
 		if (!template) return;
 		saving = true;
-		const outfit = await saveOutfit({ name, code: template.raw, notes, tags, imageIds: [], race: race as '', gender: gender as '', profession: profession as '' });
+		const outfit = await saveOutfit({
+			name, code: template.raw, notes, tags, imageIds: [],
+			race: race as '', gender: gender as '', profession: profession as '',
+			infusions
+		});
 		goto(`/outfit/${outfit.id}`);
 	}
 </script>
@@ -84,7 +91,8 @@
 			class="shrink-0 bg-[var(--color-accent)] text-[var(--color-bg)] font-semibold px-4 py-2 rounded text-sm hover:bg-[var(--color-accent-strong)] transition-colors disabled:opacity-50"
 		>{saving ? 'Saving…' : '+ Save to my Armory'}</button>
 	</div>
-	<TemplateViewer {template} />
+	<!-- Read-only view: no onInfusionChange = no editable buttons -->
+	<TemplateViewer {template} {infusions} />
 {:else}
 	<div class="text-[var(--color-text-faint)] text-sm">Loading…</div>
 {/if}
