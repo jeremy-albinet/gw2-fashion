@@ -8,7 +8,7 @@
 	<header class="border-b border-[var(--color-border)] bg-[var(--color-bg-elev)]">
 		<div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
 			<a href="/" class="font-display font-bold text-[var(--color-accent)] tracking-wide text-lg">
-				GW2 Armory
+				GW2 Fashion
 			</a>
 			<nav class="flex items-center gap-4 text-sm">
 				<a href="/" class="text-[var(--color-text-dim)] hover:text-[var(--color-text)] transition-colors">Collection</a>
@@ -26,6 +26,6 @@
 	</main>
 
 	<footer class="border-t border-[var(--color-border)] text-center text-xs text-[var(--color-text-faint)] py-4">
-		GW2 Armory — data from <a href="https://api.guildwars2.com" class="hover:text-[var(--color-text-dim)] underline" target="_blank" rel="noopener">api.guildwars2.com</a>
+		GW2 Fashion — data from <a href="https://api.guildwars2.com" class="hover:text-[var(--color-text-dim)] underline" target="_blank" rel="noopener">api.guildwars2.com</a>
 	</footer>
 </div>

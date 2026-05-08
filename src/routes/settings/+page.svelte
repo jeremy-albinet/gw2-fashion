@@ -88,7 +88,7 @@
 </script>
 
 <svelte:head>
-	<title>Settings — GW2 Armory</title>
+	<title>Settings — GW2 Fashion</title>
 </svelte:head>
 
 <div class="max-w-xl mx-auto space-y-6">

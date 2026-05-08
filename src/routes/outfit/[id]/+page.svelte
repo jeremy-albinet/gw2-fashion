@@ -100,7 +100,7 @@
 </script>
 
 <svelte:head>
-	<title>{outfit?.name ?? 'Outfit'} — GW2 Armory</title>
+	<title>{outfit?.name ?? 'Outfit'} — GW2 Fashion</title>
 </svelte:head>
 
 {#if !outfit || !template}

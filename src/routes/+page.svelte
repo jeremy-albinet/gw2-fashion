@@ -56,7 +56,7 @@
 </script>
 
 <svelte:head>
-	<title>GW2 Armory</title>
+	<title>GW2 Fashion</title>
 </svelte:head>
 
 {#if !loaded}

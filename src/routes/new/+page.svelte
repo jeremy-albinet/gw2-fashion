@@ -80,7 +80,7 @@
 </script>
 
 <svelte:head>
-	<title>Add Outfit — GW2 Armory</title>
+	<title>Add Outfit — GW2 Fashion</title>
 </svelte:head>
 
 <div class="max-w-2xl mx-auto">

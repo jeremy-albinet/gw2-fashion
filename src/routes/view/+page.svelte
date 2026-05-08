@@ -49,7 +49,7 @@
 </script>
 
 <svelte:head>
-	<title>{name || 'Shared Outfit'} — GW2 Armory</title>
+	<title>{name || 'Shared Outfit'} — GW2 Fashion</title>
 </svelte:head>
 
 {#if error}
