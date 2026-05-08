@@ -61,7 +61,7 @@ export async function getAllOutfits(): Promise<StoredOutfit[]> {
 
 export async function deleteOutfit(id: string): Promise<void> {
 	const outfit = await getOutfit(id);
-	if (outfit?.imageIds.length) {
+	if (outfit?.imageIds?.length) {
 		await deleteImages(outfit.imageIds);
 	}
 	await del(key(id));

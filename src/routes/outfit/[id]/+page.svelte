@@ -60,7 +60,7 @@
 	async function removeImage(imageId: string) {
 		if (!outfit) return;
 		await deleteImages([imageId]);
-		const imageIds = outfit.imageIds.filter((id) => id !== imageId);
+		const imageIds = (outfit.imageIds ?? []).filter((id) => id !== imageId);
 		const updated = await updateOutfit(outfit.id, { imageIds });
 		if (updated) outfit = updated;
 	}
@@ -108,7 +108,7 @@
 				class="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-2 text-sm text-[var(--color-text)] placeholder:text-[var(--color-text-faint)] focus:outline-none focus:border-[var(--color-accent)]"
 			/>
 
-			{#if outfit.imageIds.length > 0}
+			{#if (outfit.imageIds?.length ?? 0) > 0}
 				<div>
 					<p class="text-xs text-[var(--color-text-faint)] mb-2">Existing screenshots — click ✕ to remove</p>
 					<ExistingImages imageIds={outfit.imageIds} onRemove={removeImage} />
@@ -147,7 +147,7 @@
 		</div>
 	{/if}
 
-	{#if outfit.imageIds.length > 0}
+	{#if (outfit.imageIds?.length ?? 0) > 0}
 		<ImageGallery imageIds={outfit.imageIds} />
 	{/if}
 

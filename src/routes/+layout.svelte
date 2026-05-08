@@ -12,6 +12,7 @@
 			</a>
 			<nav class="flex items-center gap-4 text-sm">
 				<a href="/" class="text-[var(--color-text-dim)] hover:text-[var(--color-text)] transition-colors">Collection</a>
+				<a href="/settings" class="text-[var(--color-text-dim)] hover:text-[var(--color-text)] transition-colors">Settings</a>
 				<a
 					href="/new"
 					class="bg-[var(--color-accent)] text-[var(--color-bg)] font-semibold px-3 py-1.5 rounded hover:bg-[var(--color-accent-strong)] transition-colors"

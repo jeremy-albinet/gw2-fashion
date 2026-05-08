@@ -4,7 +4,8 @@ import type {
 	FashionTemplate,
 	OutfitPiece,
 	VisibilityFlags,
-	WeaponSet
+	WeaponSet,
+	WeaponSlotId
 } from './types';
 
 const FASHION_HEADER = 0x0f;
@@ -134,4 +135,71 @@ export function isFashionTemplateCode(input: string): boolean {
 	} catch {
 		return false;
 	}
+}
+
+import type { Gw2EquipmentTab } from './api';
+
+const API_SLOT_TO_ARMOR: Record<string, ArmorSlotId> = {
+	HelmAquatic: 'aquabreather',
+	Backpack: 'backpack',
+	Coat: 'chest',
+	Boots: 'boots',
+	Gloves: 'gloves',
+	Helm: 'helmet',
+	Leggings: 'leggings',
+	Shoulders: 'shoulders'
+};
+
+const API_SLOT_TO_WEAPON: Record<string, WeaponSlotId> = {
+	WeaponAquaticA: 'aquaA',
+	WeaponAquaticB: 'aquaB',
+	WeaponA1: 'setA1',
+	WeaponA2: 'setA2',
+	WeaponB1: 'setB1',
+	WeaponB2: 'setB2'
+};
+
+function defaultArmorPiece(): ArmorPiece {
+	return { skinId: 0, dyeIds: [1, 1, 1, 1] };
+}
+
+function defaultVisibility(): VisibilityFlags {
+	return {
+		aquabreather: false, backpack: true, chest: true, boots: true,
+		gloves: true, helmet: true, leggings: true, shoulders: true,
+		outfit: false, aquaA: false, aquaB: false,
+		setA1: true, setA2: true, setB1: false, setB2: false
+	};
+}
+
+export function equipmentTabToTemplate(tab: Gw2EquipmentTab): FashionTemplate {
+	const armor: Record<ArmorSlotId, ArmorPiece> = {
+		aquabreather: defaultArmorPiece(), backpack: defaultArmorPiece(),
+		chest: defaultArmorPiece(), boots: defaultArmorPiece(), gloves: defaultArmorPiece(),
+		helmet: defaultArmorPiece(), leggings: defaultArmorPiece(), shoulders: defaultArmorPiece()
+	};
+	const weapons: WeaponSet = { aquaA: 0, aquaB: 0, setA1: 0, setA2: 0, setB1: 0, setB2: 0 };
+	const outfit: OutfitPiece = { outfitId: 0, dyeIds: [1, 1, 1, 1] };
+
+	for (const item of tab.equipment) {
+		const armorSlot = API_SLOT_TO_ARMOR[item.slot];
+		const weaponSlot = API_SLOT_TO_WEAPON[item.slot];
+		if (armorSlot) {
+			const raw = item.dyes ?? [];
+			const dyeIds: [number, number, number, number] = [
+				raw[0] ?? 1, raw[1] ?? 1, raw[2] ?? 1, raw[3] ?? 1
+			];
+			armor[armorSlot] = { skinId: item.skin ?? 0, dyeIds };
+		} else if (weaponSlot) {
+			weapons[weaponSlot] = item.skin ?? 0;
+		}
+	}
+
+	return {
+		armor,
+		outfit,
+		weapons,
+		visibility: defaultVisibility(),
+		raw: ''
+	};
 }

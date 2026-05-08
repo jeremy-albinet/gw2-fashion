@@ -89,3 +89,70 @@ export function skinIconUrl(icon: string): string {
 export function dyeSwatchRgb(color: Gw2Color): [number, number, number] {
 	return color.cloth?.rgb ?? color.leather?.rgb ?? color.metal?.rgb ?? color.base_rgb;
 }
+
+const API_KEY_STORE = 'gw2_api_key';
+const inMemoryApiKey: { value: string | null } = { value: null };
+
+export async function saveApiKey(key: string): Promise<void> {
+	inMemoryApiKey.value = key;
+	await set(API_KEY_STORE, key);
+}
+
+export async function loadApiKey(): Promise<string | null> {
+	if (inMemoryApiKey.value !== null) return inMemoryApiKey.value;
+	const stored = await get<string>(API_KEY_STORE);
+	inMemoryApiKey.value = stored ?? null;
+	return inMemoryApiKey.value;
+}
+
+export async function clearApiKey(): Promise<void> {
+	inMemoryApiKey.value = null;
+	await set(API_KEY_STORE, null);
+}
+
+function authedUrl(endpoint: string, key: string): string {
+	const sep = endpoint.includes('?') ? '&' : '?';
+	return `${BASE}${endpoint}${sep}access_token=${encodeURIComponent(key)}`;
+}
+
+export interface Gw2AccountInfo {
+	id: string;
+	name: string;
+	world: number;
+}
+
+export interface Gw2EquipmentTabItem {
+	id: number;
+	slot: string;
+	skin?: number;
+	dyes?: (number | null)[];
+	upgrades?: number[];
+	infusions?: number[];
+	stats?: { id: number };
+}
+
+export interface Gw2EquipmentTab {
+	tab: number;
+	name: string;
+	is_active: boolean;
+	equipment: Gw2EquipmentTabItem[];
+}
+
+export async function fetchAccount(key: string): Promise<Gw2AccountInfo> {
+	const res = await fetch(authedUrl('/v2/account', key));
+	if (!res.ok) throw new Error(`API error ${res.status}: ${await res.text()}`);
+	return res.json();
+}
+
+export async function fetchCharacterNames(key: string): Promise<string[]> {
+	const res = await fetch(authedUrl('/v2/characters', key));
+	if (!res.ok) throw new Error(`API error ${res.status}: ${await res.text()}`);
+	return res.json();
+}
+
+export async function fetchEquipmentTabs(key: string, characterName: string): Promise<Gw2EquipmentTab[]> {
+	const url = authedUrl(`/v2/characters/${encodeURIComponent(characterName)}/equipmenttabs?tabs=all&v=latest`, key);
+	const res = await fetch(url);
+	if (!res.ok) throw new Error(`API error ${res.status}: ${await res.text()}`);
+	return res.json();
+}
