@@ -70,7 +70,7 @@
 	</div>
 {:else}
 	<div class="mb-5 flex items-center justify-between">
-		<h1 class="font-display text-2xl text-[var(--color-text)]">My Armory</h1>
+		<h1 class="font-display text-2xl text-[var(--color-text)]">My Collection</h1>
 		<span class="text-sm text-[var(--color-text-faint)]">
 			{filtered.length}{filtered.length !== allOutfits.length ? `/${allOutfits.length}` : ''} outfit{allOutfits.length === 1 ? '' : 's'}
 		</span>
