@@ -2,14 +2,16 @@
 	import { goto } from '$app/navigation';
 	import { decodeFashionTemplate, FashionTemplateError } from '$lib/gw2/decoder';
 	import { isFashionTemplateCode } from '$lib/gw2/decoder';
-	import { saveOutfit } from '$lib/storage';
+	import { saveOutfit, saveImage } from '$lib/storage';
 	import TemplateViewer from '$lib/components/TemplateViewer.svelte';
+	import ImageUploader from '$lib/components/ImageUploader.svelte';
 	import type { FashionTemplate } from '$lib/gw2/types';
 
 	let codeInput = $state('');
 	let nameInput = $state('');
 	let notesInput = $state('');
 	let tagsInput = $state('');
+	let images = $state<{ file: File; preview: string }[]>([]);
 	let decoded = $state<FashionTemplate | null>(null);
 	let error = $state<string | null>(null);
 	let saving = $state(false);
@@ -44,11 +46,13 @@
 			.split(',')
 			.map((t) => t.trim())
 			.filter(Boolean);
+		const imageIds = await Promise.all(images.map((img) => saveImage(img.file)));
 		const outfit = await saveOutfit({
 			name: nameInput.trim() || 'Untitled',
 			code: decoded.raw,
 			notes: notesInput.trim(),
-			tags
+			tags,
+			imageIds
 		});
 		goto(`/outfit/${outfit.id}`);
 	}
@@ -116,6 +120,13 @@
 					placeholder="Sylvari, Mesmer, Purple"
 					class="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-2 text-sm text-[var(--color-text)] placeholder:text-[var(--color-text-faint)] focus:outline-none focus:border-[var(--color-accent)]"
 				/>
+			</div>
+
+			<div>
+				<span class="block text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest mb-1.5">
+					Screenshots <span class="font-normal text-[var(--color-text-faint)] normal-case tracking-normal">(optional)</span>
+				</span>
+				<ImageUploader bind:images />
 			</div>
 
 			<div class="border-t border-[var(--color-border)] pt-4">

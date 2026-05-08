@@ -2,12 +2,18 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import { getOutfit, updateOutfit, deleteOutfit, encodeSharePayload, type StoredOutfit } from '$lib/storage';
+	import {
+		getOutfit, updateOutfit, deleteOutfit, encodeSharePayload,
+		saveImage, deleteImages, type StoredOutfit
+	} from '$lib/storage';
 	import { decodeFashionTemplate } from '$lib/gw2/decoder';
 	import TemplateViewer from '$lib/components/TemplateViewer.svelte';
+	import ImageGallery from '$lib/components/ImageGallery.svelte';
+	import ImageUploader from '$lib/components/ImageUploader.svelte';
+	import ExistingImages from '$lib/components/ExistingImages.svelte';
 	import type { FashionTemplate } from '$lib/gw2/types';
 
-	const id = $derived(page.params.id ?? "");
+	const id = $derived(page.params.id ?? '');
 
 	let outfit = $state<StoredOutfit | null>(null);
 	let template = $state<FashionTemplate | null>(null);
@@ -17,14 +23,14 @@
 	let editName = $state('');
 	let editNotes = $state('');
 	let editTags = $state('');
+	let editImages = $state<{ file: File; preview: string }[]>([]);
 
 	onMount(async () => {
 		const o = await getOutfit(id);
 		if (!o) { goto('/'); return; }
 		outfit = o;
 		template = decodeFashionTemplate(o.code);
-		const payload = encodeSharePayload(o);
-		shareUrl = `${window.location.origin}/view#${payload}`;
+		shareUrl = `${window.location.origin}/view#${encodeSharePayload(o)}`;
 	});
 
 	function startEdit() {
@@ -32,15 +38,31 @@
 		editName = outfit.name;
 		editNotes = outfit.notes;
 		editTags = outfit.tags.join(', ');
+		editImages = [];
 		editing = true;
 	}
 
 	async function saveEdit() {
 		if (!outfit) return;
 		const tags = editTags.split(',').map((t) => t.trim()).filter(Boolean);
-		const updated = await updateOutfit(outfit.id, { name: editName.trim() || 'Untitled', notes: editNotes.trim(), tags });
+		const newImageIds = await Promise.all(editImages.map((img) => saveImage(img.file)));
+		const imageIds = [...(outfit.imageIds ?? []), ...newImageIds];
+		const updated = await updateOutfit(outfit.id, {
+			name: editName.trim() || 'Untitled',
+			notes: editNotes.trim(),
+			tags,
+			imageIds
+		});
 		if (updated) outfit = updated;
 		editing = false;
+	}
+
+	async function removeImage(imageId: string) {
+		if (!outfit) return;
+		await deleteImages([imageId]);
+		const imageIds = outfit.imageIds.filter((id) => id !== imageId);
+		const updated = await updateOutfit(outfit.id, { imageIds });
+		if (updated) outfit = updated;
 	}
 
 	async function handleDelete() {
@@ -85,13 +107,26 @@
 				placeholder="Tags (comma-separated)"
 				class="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-2 text-sm text-[var(--color-text)] placeholder:text-[var(--color-text-faint)] focus:outline-none focus:border-[var(--color-accent)]"
 			/>
+
+			{#if outfit.imageIds.length > 0}
+				<div>
+					<p class="text-xs text-[var(--color-text-faint)] mb-2">Existing screenshots — click ✕ to remove</p>
+					<ExistingImages imageIds={outfit.imageIds} onRemove={removeImage} />
+				</div>
+			{/if}
+
+			<div>
+				<p class="text-xs text-[var(--color-text-faint)] mb-2">Add more screenshots</p>
+				<ImageUploader bind:images={editImages} maxImages={8 - (outfit.imageIds?.length ?? 0)} />
+			</div>
+
 			<div class="flex gap-2">
 				<button onclick={saveEdit} class="bg-[var(--color-accent)] text-[var(--color-bg)] font-semibold px-4 py-1.5 rounded text-sm hover:bg-[var(--color-accent-strong)] transition-colors">Save</button>
 				<button onclick={() => { editing = false; }} class="border border-[var(--color-border)] text-[var(--color-text-dim)] px-4 py-1.5 rounded text-sm hover:border-[var(--color-text-dim)] transition-colors">Cancel</button>
 			</div>
 		</div>
 	{:else}
-		<div class="flex items-start justify-between gap-4 mb-6">
+		<div class="flex items-start justify-between gap-4 mb-4">
 			<div>
 				<h1 class="font-display text-3xl text-[var(--color-text)]">{outfit.name}</h1>
 				{#if outfit.notes}
@@ -112,6 +147,10 @@
 		</div>
 	{/if}
 
+	{#if outfit.imageIds.length > 0}
+		<ImageGallery imageIds={outfit.imageIds} />
+	{/if}
+
 	<TemplateViewer {template} />
 
 	<div class="mt-8 border-t border-[var(--color-border)] pt-6">
@@ -128,7 +167,7 @@
 			>{copied ? '✓ Copied' : 'Copy link'}</button>
 		</div>
 		<p class="text-xs text-[var(--color-text-faint)] mt-1.5">
-			The share link encodes all data in the URL — no account needed to view it.
+			The share link encodes all data in the URL — no account needed to view it. Images are stored locally only.
 		</p>
 	</div>
 {/if}

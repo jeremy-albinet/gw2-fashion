@@ -37,7 +37,7 @@
 	async function saveToArmory() {
 		if (!template) return;
 		saving = true;
-		const outfit = await saveOutfit({ name, code: template.raw, notes, tags });
+		const outfit = await saveOutfit({ name, code: template.raw, notes, tags, imageIds: [] });
 		goto(`/outfit/${outfit.id}`);
 	}
 </script>
