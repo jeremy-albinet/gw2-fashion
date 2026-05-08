@@ -3,6 +3,7 @@ import { get, set } from 'idb-keyval';
 const BASE = 'https://api.guildwars2.com/v2';
 const CACHE_PREFIX_SKIN = 'gw2_skin_';
 const CACHE_PREFIX_COLOR = 'gw2_color_';
+const CACHE_PREFIX_ITEM = 'gw2_item_';
 
 export interface Gw2Skin {
 	id: number;
@@ -22,8 +23,26 @@ export interface Gw2Color {
 	fur?: { brightness: number; contrast: number; hue: number; saturation: number; lightness: number; rgb: [number, number, number] };
 }
 
+export interface Gw2Item {
+	id: number;
+	name: string;
+	icon: string;
+	type: string;
+	rarity: string;
+	chat_link: string;
+	details?: {
+		type?: string;
+		infusion_upgrade_flags?: string[];
+		infix_upgrade?: {
+			buff?: { description?: string };
+			attributes?: { attribute: string; modifier: number }[];
+		};
+	};
+}
+
 const inMemorySkins = new Map<number, Gw2Skin>();
 const inMemoryColors = new Map<number, Gw2Color>();
+const inMemoryItems = new Map<number, Gw2Item>();
 
 async function batchFetch<T>(
 	ids: number[],
@@ -60,8 +79,9 @@ async function batchFetch<T>(
 		chunks.map(async (chunk) => {
 			const url = `${BASE}/${endpoint}?ids=${chunk.join(',')}`;
 			const res = await fetch(url);
-			if (!res.ok) return;
+			if (!res.ok && res.status !== 206) return;
 			const data: T[] = await res.json();
+			if (!Array.isArray(data)) return;
 			for (const item of data) {
 				const id = (item as Record<string, unknown>).id as number;
 				inMemory.set(id, item);
@@ -80,6 +100,10 @@ export async function fetchSkins(ids: number[]): Promise<Map<number, Gw2Skin>> {
 
 export async function fetchColors(ids: number[]): Promise<Map<number, Gw2Color>> {
 	return batchFetch(ids, 'colors', CACHE_PREFIX_COLOR, inMemoryColors);
+}
+
+export async function fetchItems(ids: number[]): Promise<Map<number, Gw2Item>> {
+	return batchFetch(ids, 'items', CACHE_PREFIX_ITEM, inMemoryItems);
 }
 
 export function skinIconUrl(icon: string): string {

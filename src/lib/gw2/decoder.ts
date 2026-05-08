@@ -4,6 +4,7 @@ import type {
 	FashionTemplate,
 	OutfitPiece,
 	VisibilityFlags,
+	WeaponInfusions,
 	WeaponSet,
 	WeaponSlotId
 } from './types';
@@ -48,6 +49,10 @@ function bytesToBase64(bytes: Uint8Array): string {
 	return btoa(bin);
 }
 
+function defaultArmorInfusions(): [number, number, number] {
+	return [0, 0, 0];
+}
+
 export function decodeFashionTemplate(input: string): FashionTemplate {
 	const stripped = stripChatLink(input);
 	if (!stripped) throw new FashionTemplateError('Empty code.');
@@ -82,9 +87,9 @@ export function decodeFashionTemplate(input: string): FashionTemplate {
 
 	const aquabreatherSkin = u16();
 	const armor = {} as Record<ArmorSlotId, ArmorPiece>;
-	armor.aquabreather = { skinId: aquabreatherSkin, dyeIds: [1, 1, 1, 1] };
+	armor.aquabreather = { skinId: aquabreatherSkin, dyeIds: [1, 1, 1, 1], infusions: defaultArmorInfusions() };
 	for (const slot of ARMOR_PARSE_ORDER) {
-		armor[slot] = { skinId: u16(), dyeIds: dyes() };
+		armor[slot] = { skinId: u16(), dyeIds: dyes(), infusions: defaultArmorInfusions() };
 	}
 
 	const outfit: OutfitPiece = { outfitId: u16(), dyeIds: dyes() };
@@ -121,6 +126,7 @@ export function decodeFashionTemplate(input: string): FashionTemplate {
 		armor,
 		outfit,
 		weapons,
+		weaponInfusions: {},
 		visibility,
 		raw: `[&${bytesToBase64(bytes)}]`
 	};
@@ -133,6 +139,20 @@ export function isFashionTemplateCode(input: string): boolean {
 		return bytes.length === EXPECTED_BYTES && bytes[0] === FASHION_HEADER;
 	} catch {
 		return false;
+	}
+}
+
+/** Parse an item chat link [&AgH...] and return the item ID, or null if not valid. */
+export function parseItemChatLink(input: string): number | null {
+	try {
+		const stripped = stripChatLink(input);
+		const bytes = base64ToBytes(stripped);
+		// Item link: header=0x02, count=1 byte, itemId=3 bytes LE, ...
+		if (bytes.length < 6 || bytes[0] !== 0x02) return null;
+		const itemId = bytes[2] | (bytes[3] << 8) | (bytes[4] << 16);
+		return itemId > 0 ? itemId : null;
+	} catch {
+		return null;
 	}
 }
 
@@ -159,7 +179,7 @@ const API_SLOT_TO_WEAPON: Record<string, WeaponSlotId> = {
 };
 
 function defaultArmorPiece(): ArmorPiece {
-	return { skinId: 0, dyeIds: [1, 1, 1, 1] };
+	return { skinId: 0, dyeIds: [1, 1, 1, 1], infusions: defaultArmorInfusions() };
 }
 
 function defaultVisibility(): VisibilityFlags {
@@ -178,6 +198,7 @@ export function equipmentTabToTemplate(tab: Gw2EquipmentTab): FashionTemplate {
 		helmet: defaultArmorPiece(), leggings: defaultArmorPiece(), shoulders: defaultArmorPiece()
 	};
 	const weapons: WeaponSet = { aquaA: 0, aquaB: 0, setA1: 0, setA2: 0, setB1: 0, setB2: 0 };
+	const weaponInfusions: WeaponInfusions = {};
 	const outfit: OutfitPiece = { outfitId: 0, dyeIds: [1, 1, 1, 1] };
 
 	for (const item of tab.equipment) {
@@ -188,9 +209,15 @@ export function equipmentTabToTemplate(tab: Gw2EquipmentTab): FashionTemplate {
 			const dyeIds: [number, number, number, number] = [
 				raw[0] ?? 1, raw[1] ?? 1, raw[2] ?? 1, raw[3] ?? 1
 			];
-			armor[armorSlot] = { skinId: item.skin ?? 0, dyeIds };
+			const inf = item.infusions ?? [];
+			const infusions: [number, number, number] = [inf[0] ?? 0, inf[1] ?? 0, inf[2] ?? 0];
+			armor[armorSlot] = { skinId: item.skin ?? 0, dyeIds, infusions };
 		} else if (weaponSlot) {
 			weapons[weaponSlot] = item.skin ?? 0;
+			const inf = item.infusions ?? [];
+			if (inf.length > 0) {
+				weaponInfusions[weaponSlot] = [inf[0] ?? 0, inf[1] ?? 0];
+			}
 		}
 	}
 
@@ -198,6 +225,7 @@ export function equipmentTabToTemplate(tab: Gw2EquipmentTab): FashionTemplate {
 		armor,
 		outfit,
 		weapons,
+		weaponInfusions,
 		visibility: defaultVisibility(),
 		raw: ''
 	};
