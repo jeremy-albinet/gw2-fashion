@@ -13,10 +13,15 @@
 		const firstId = outfit.imageIds?.[0];
 		if (firstId) {
 			getImage(firstId).then((blob) => {
-				if (blob) { _coverUrl = URL.createObjectURL(blob); coverUrl = _coverUrl; }
+				if (blob) {
+					_coverUrl = URL.createObjectURL(blob);
+					coverUrl = _coverUrl;
+				}
 			});
 		}
-		return () => { if (_coverUrl) URL.revokeObjectURL(_coverUrl); };
+		return () => {
+			if (_coverUrl) URL.revokeObjectURL(_coverUrl);
+		};
 	});
 </script>
 

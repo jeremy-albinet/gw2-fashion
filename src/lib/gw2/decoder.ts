@@ -129,7 +129,6 @@ export function decodeFashionTemplate(input: string): FashionTemplate {
 export function isFashionTemplateCode(input: string): boolean {
 	try {
 		const stripped = stripChatLink(input);
-		if (!stripped) return false;
 		const bytes = base64ToBytes(stripped);
 		return bytes.length === EXPECTED_BYTES && bytes[0] === FASHION_HEADER;
 	} catch {
