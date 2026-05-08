@@ -1,16 +1,17 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import {
-		loadApiKey, fetchCharacterNames, fetchEquipmentTabs,
+		loadApiKey, fetchCharacterNames, fetchEquipmentTabs, fetchCharacter,
 		type Gw2EquipmentTab
 	} from '$lib/gw2/api';
 	import { equipmentTabToTemplate } from '$lib/gw2/decoder';
 	import type { FashionTemplate } from '$lib/gw2/types';
+	import type { Race, Gender, Profession } from '$lib/gw2/constants';
 
 	let {
 		onSelect
 	}: {
-		onSelect: (template: FashionTemplate, name: string) => void;
+		onSelect: (template: FashionTemplate, name: string, race: Race | '', gender: Gender | '', profession: Profession | '') => void;
 	} = $props();
 
 	let apiKey = $state<string | null>(null);
@@ -57,12 +58,23 @@
 		}
 	}
 
-	function handleUse() {
+	async function handleUse() {
 		const tab = tabs.find((t) => t.tab === selectedTab);
-		if (!tab) return;
+		if (!tab || !apiKey) return;
 		const template = equipmentTabToTemplate(tab);
 		const tabLabel = tab.name || `Tab ${tab.tab}`;
-		onSelect(template, `${selectedChar} — ${tabLabel}`);
+
+		let race: Race | '' = '';
+		let gender: Gender | '' = '';
+		let profession: Profession | '' = '';
+		try {
+			const char = await fetchCharacter(apiKey, selectedChar);
+			race = char.race as Race;
+			gender = char.gender as Gender;
+			profession = char.profession as Profession;
+		} catch { }
+
+		onSelect(template, `${selectedChar} — ${tabLabel}`, race, gender, profession);
 	}
 </script>
 
@@ -81,9 +93,7 @@
 {:else}
 	<div class="space-y-3">
 		<div>
-			<label for="char-select" class="block text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest mb-1.5">
-				Character
-			</label>
+			<label for="char-select" class="block text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest mb-1.5">Character</label>
 			<select
 				id="char-select"
 				value={selectedChar}
@@ -101,9 +111,7 @@
 			<p class="text-sm text-[var(--color-text-faint)]">Loading equipment tabs…</p>
 		{:else if tabs.length > 0}
 			<div>
-				<label for="tab-select" class="block text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest mb-1.5">
-					Equipment Tab
-				</label>
+				<label for="tab-select" class="block text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest mb-1.5">Equipment Tab</label>
 				<select
 					id="tab-select"
 					value={selectedTab}
@@ -115,15 +123,12 @@
 					{/each}
 				</select>
 			</div>
-
 			<button
 				type="button"
 				onclick={handleUse}
 				disabled={selectedTab === null}
 				class="w-full bg-[var(--color-accent)] text-[var(--color-bg)] font-semibold py-2.5 rounded hover:bg-[var(--color-accent-strong)] transition-colors disabled:opacity-50"
-			>
-				Use This Equipment Tab
-			</button>
+			>Use This Equipment Tab</button>
 		{/if}
 	</div>
 {/if}

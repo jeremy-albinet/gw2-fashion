@@ -40,7 +40,17 @@
 				<h3 class="font-semibold text-[var(--color-text)] truncate group-hover:text-[var(--color-accent)] transition-colors">
 					{outfit.name || 'Untitled'}
 				</h3>
-				<p class="text-xs text-[var(--color-text-faint)] mt-0.5">{date}</p>
+				<div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
+					{#if outfit.profession}
+						<span class="text-xs text-[var(--color-accent)]">{outfit.profession}</span>
+					{/if}
+					{#if outfit.race}
+						<span class="text-xs text-[var(--color-text-faint)]">{outfit.gender ? outfit.gender + ' ' : ''}{outfit.race}</span>
+					{/if}
+					{#if !outfit.profession && !outfit.race}
+						<p class="text-xs text-[var(--color-text-faint)]">{date}</p>
+					{/if}
+				</div>
 			</div>
 			{#if ondelete}
 				<button
@@ -51,6 +61,9 @@
 				>✕</button>
 			{/if}
 		</div>
+		{#if outfit.profession || outfit.race}
+			<p class="text-xs text-[var(--color-text-faint)] mt-0.5">{date}</p>
+		{/if}
 		{#if outfit.notes}
 			<p class="text-sm text-[var(--color-text-dim)] mt-2 line-clamp-2">{outfit.notes}</p>
 		{/if}

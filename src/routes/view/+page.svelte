@@ -10,6 +10,9 @@
 	let name = $state('');
 	let notes = $state('');
 	let tags = $state<string[]>([]);
+	let race = $state('');
+	let gender = $state('');
+	let profession = $state('');
 	let error = $state<string | null>(null);
 	let saving = $state(false);
 
@@ -29,6 +32,9 @@
 			name = payload.name;
 			notes = payload.notes;
 			tags = payload.tags;
+			race = payload.race ?? '';
+			gender = payload.gender ?? '';
+			profession = payload.profession ?? '';
 		} catch (e) {
 			error = e instanceof Error ? e.message : 'Decode failed.';
 		}
@@ -37,7 +43,7 @@
 	async function saveToArmory() {
 		if (!template) return;
 		saving = true;
-		const outfit = await saveOutfit({ name, code: template.raw, notes, tags, imageIds: [] });
+		const outfit = await saveOutfit({ name, code: template.raw, notes, tags, imageIds: [], race: race as '', gender: gender as '', profession: profession as '' });
 		goto(`/outfit/${outfit.id}`);
 	}
 </script>
@@ -58,6 +64,9 @@
 		<div>
 			<p class="text-xs text-[var(--color-text-faint)] mb-1">Shared outfit</p>
 			<h1 class="font-display text-3xl text-[var(--color-text)]">{name || 'Untitled'}</h1>
+			{#if profession || race}
+				<p class="text-sm text-[var(--color-text-dim)] mt-1">{[profession, gender, race].filter(Boolean).join(' · ')}</p>
+			{/if}
 			{#if notes}
 				<p class="text-[var(--color-text-dim)] mt-1 text-sm">{notes}</p>
 			{/if}

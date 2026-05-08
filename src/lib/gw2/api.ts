@@ -139,20 +139,33 @@ export interface Gw2EquipmentTab {
 }
 
 export async function fetchAccount(key: string): Promise<Gw2AccountInfo> {
-	const res = await fetch(authedUrl('/v2/account', key));
+	const res = await fetch(authedUrl('/account', key));
 	if (!res.ok) throw new Error(`API error ${res.status}: ${await res.text()}`);
 	return res.json();
 }
 
 export async function fetchCharacterNames(key: string): Promise<string[]> {
-	const res = await fetch(authedUrl('/v2/characters', key));
+	const res = await fetch(authedUrl('/characters', key));
 	if (!res.ok) throw new Error(`API error ${res.status}: ${await res.text()}`);
 	return res.json();
 }
 
 export async function fetchEquipmentTabs(key: string, characterName: string): Promise<Gw2EquipmentTab[]> {
-	const url = authedUrl(`/v2/characters/${encodeURIComponent(characterName)}/equipmenttabs?tabs=all&v=latest`, key);
+	const url = authedUrl(`/characters/${encodeURIComponent(characterName)}/equipmenttabs?tabs=all&v=latest`, key);
 	const res = await fetch(url);
+	if (!res.ok) throw new Error(`API error ${res.status}: ${await res.text()}`);
+	return res.json();
+}
+
+export interface Gw2Character {
+	name: string;
+	race: string;
+	gender: string;
+	profession: string;
+}
+
+export async function fetchCharacter(key: string, characterName: string): Promise<Gw2Character> {
+	const res = await fetch(authedUrl(`/characters/${encodeURIComponent(characterName)}?v=latest`, key));
 	if (!res.ok) throw new Error(`API error ${res.status}: ${await res.text()}`);
 	return res.json();
 }

@@ -12,6 +12,7 @@
 	import ImageUploader from '$lib/components/ImageUploader.svelte';
 	import ExistingImages from '$lib/components/ExistingImages.svelte';
 	import type { FashionTemplate } from '$lib/gw2/types';
+	import { RACES, GENDERS, PROFESSIONS, type Race, type Gender, type Profession } from '$lib/gw2/constants';
 
 	const id = $derived(page.params.id ?? '');
 
@@ -21,6 +22,9 @@
 	let copied = $state(false);
 	let editing = $state(false);
 	let editName = $state('');
+	let editRace = $state<Race | ''>('');
+	let editGender = $state<Gender | ''>('');
+	let editProfession = $state<Profession | ''>('');
 	let editNotes = $state('');
 	let editTags = $state('');
 	let editImages = $state<{ file: File; preview: string }[]>([]);
@@ -36,6 +40,9 @@
 	function startEdit() {
 		if (!outfit) return;
 		editName = outfit.name;
+		editRace = (outfit.race as Race) || '';
+		editGender = (outfit.gender as Gender) || '';
+		editProfession = (outfit.profession as Profession) || '';
 		editNotes = outfit.notes;
 		editTags = outfit.tags.join(', ');
 		editImages = [];
@@ -49,6 +56,9 @@
 		const imageIds = [...(outfit.imageIds ?? []), ...newImageIds];
 		const updated = await updateOutfit(outfit.id, {
 			name: editName.trim() || 'Untitled',
+			race: editRace,
+			gender: editGender,
+			profession: editProfession,
 			notes: editNotes.trim(),
 			tags,
 			imageIds
@@ -96,6 +106,20 @@
 				placeholder="Name"
 				class="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-2 text-sm text-[var(--color-text)] placeholder:text-[var(--color-text-faint)] focus:outline-none focus:border-[var(--color-accent)]"
 			/>
+			<div class="grid grid-cols-3 gap-3">
+				<select bind:value={editRace} class="bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]">
+					<option value="">Race</option>
+					{#each RACES as r}<option value={r}>{r}</option>{/each}
+				</select>
+				<select bind:value={editGender} class="bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]">
+					<option value="">Gender</option>
+					{#each GENDERS as g}<option value={g}>{g}</option>{/each}
+				</select>
+				<select bind:value={editProfession} class="bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]">
+					<option value="">Profession</option>
+					{#each PROFESSIONS as p}<option value={p}>{p}</option>{/each}
+				</select>
+			</div>
 			<textarea
 				bind:value={editNotes}
 				placeholder="Notes…"
@@ -129,6 +153,11 @@
 		<div class="flex items-start justify-between gap-4 mb-4">
 			<div>
 				<h1 class="font-display text-3xl text-[var(--color-text)]">{outfit.name}</h1>
+				{#if outfit.profession || outfit.race}
+					<p class="text-sm text-[var(--color-text-dim)] mt-1">
+						{[outfit.profession, outfit.gender, outfit.race].filter(Boolean).join(' · ')}
+					</p>
+				{/if}
 				{#if outfit.notes}
 					<p class="text-[var(--color-text-dim)] mt-1 text-sm">{outfit.notes}</p>
 				{/if}

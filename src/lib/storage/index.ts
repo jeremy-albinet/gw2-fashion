@@ -1,4 +1,5 @@
 import { get, set, del, keys } from 'idb-keyval';
+import type { Race, Gender, Profession } from '$lib/gw2/constants';
 
 const OUTFIT_PREFIX = 'outfit_';
 const IMAGE_PREFIX = 'img_';
@@ -7,6 +8,9 @@ export interface StoredOutfit {
 	id: string;
 	name: string;
 	code: string;
+	race: Race | '';
+	gender: Gender | '';
+	profession: Profession | '';
 	notes: string;
 	tags: string[];
 	imageIds: string[];
@@ -83,13 +87,16 @@ export async function deleteImages(ids: string[]): Promise<void> {
 
 export function encodeSharePayload(outfit: StoredOutfit): string {
 	return btoa(
-		JSON.stringify({ name: outfit.name, code: outfit.code, notes: outfit.notes, tags: outfit.tags })
+		JSON.stringify({
+			name: outfit.name, code: outfit.code, notes: outfit.notes, tags: outfit.tags,
+			race: outfit.race, gender: outfit.gender, profession: outfit.profession
+		})
 	);
 }
 
 export function decodeSharePayload(
 	hash: string
-): { name: string; code: string; notes: string; tags: string[] } | null {
+): Pick<StoredOutfit, 'name' | 'code' | 'notes' | 'tags' | 'race' | 'gender' | 'profession'> | null {
 	try {
 		const cleaned = hash.startsWith('#') ? hash.slice(1) : hash;
 		const parsed = JSON.parse(atob(cleaned));
@@ -98,9 +105,10 @@ export function decodeSharePayload(
 			name: typeof parsed.name === 'string' ? parsed.name : 'Untitled',
 			code: parsed.code,
 			notes: typeof parsed.notes === 'string' ? parsed.notes : '',
-			tags: Array.isArray(parsed.tags)
-				? parsed.tags.filter((t: unknown) => typeof t === 'string')
-				: []
+			tags: Array.isArray(parsed.tags) ? parsed.tags.filter((t: unknown) => typeof t === 'string') : [],
+			race: parsed.race ?? '',
+			gender: parsed.gender ?? '',
+			profession: parsed.profession ?? ''
 		};
 	} catch {
 		return null;
