@@ -2,17 +2,27 @@
 	import type { Gw2Color, Gw2Skin } from '$lib/gw2/api';
 	import { skinWardrobeLink, wikiUrl } from '$lib/gw2/chatlink';
 	import DyeSwatch from './DyeSwatch.svelte';
+	import InfusionPicker from './InfusionPicker.svelte';
+	import catalog from '$lib/gw2/infusions.generated.json';
+
+	const INFUSION_MAP = new Map(
+		(catalog.infusions as { id: number; name: string; icon: string; buff: string }[]).map((inf) => [inf.id, inf])
+	);
 
 	let {
 		label,
 		skin,
 		dyeIds,
-		colors
+		colors,
+		infusions,
+		onInfusionChange
 	}: {
 		label: string;
 		skin: Gw2Skin | undefined;
 		dyeIds?: [number, number, number, number];
 		colors?: Map<number, Gw2Color>;
+		infusions?: [number, number, number] | [number, number];
+		onInfusionChange?: (slotIndex: number, itemId: number) => void;
 	} = $props();
 
 	const hasDyes = $derived(!!dyeIds && !!colors);
@@ -20,11 +30,20 @@
 		hasDyes ? dyeIds!.filter((id) => id > 1).map((id) => colors!.get(id)) : []
 	);
 
+	const activeInfusions = $derived(
+		(infusions ?? []).map((id, i) => ({ id, index: i, info: id > 0 ? INFUSION_MAP.get(id) : undefined }))
+	);
+	const hasInfusionSupport = $derived(!!onInfusionChange);
+
 	let tooltipVisible = $state(false);
 	let copied = $state(false);
 	let tooltipEl = $state<HTMLDivElement | undefined>();
 	let wrapperEl = $state<HTMLDivElement | undefined>();
 	let above = $state(false);
+
+	// Infusion picker state
+	let pickerOpen = $state(false);
+	let pickerSlotIndex = $state(0);
 
 	function showTooltip() {
 		if (!skin) return;
@@ -36,6 +55,7 @@
 		});
 	}
 	function hideTooltip() {
+		if (pickerOpen) return;
 		tooltipVisible = false;
 		copied = false;
 	}
@@ -49,9 +69,23 @@
 		setTimeout(() => { copied = false; }, 1800);
 	}
 
+	function openPicker(e: MouseEvent, slotIndex: number) {
+		e.stopPropagation();
+		pickerSlotIndex = slotIndex;
+		pickerOpen = true;
+		tooltipVisible = false;
+	}
+
+	function handleInfusionSelect(itemId: number) {
+		onInfusionChange?.(pickerSlotIndex, itemId);
+		pickerOpen = false;
+	}
+
 	const skinType = $derived(
 		skin ? [skin.type, skin.details?.type].filter(Boolean).join(' · ') : ''
 	);
+
+	const currentPickerInfusionId = $derived(infusions?.[pickerSlotIndex] ?? 0);
 </script>
 
 <div
@@ -88,10 +122,36 @@
 		{/if}
 	</div>
 
+	<!-- Dyes -->
 	{#if hasDyes && activeDyes.length > 0}
 		<div class="flex gap-0.5 shrink-0">
 			{#each activeDyes as dye}
 				<DyeSwatch color={dye} size={14} />
+			{/each}
+		</div>
+	{/if}
+
+	<!-- Infusion slots -->
+	{#if infusions !== undefined}
+		<div class="flex gap-0.5 shrink-0">
+			{#each (infusions as number[]) as infId, i}
+				{@const inf = infId > 0 ? INFUSION_MAP.get(infId) : undefined}
+				<button
+					type="button"
+					onclick={(e) => openPicker(e, i)}
+					class="w-5 h-5 rounded border transition-colors overflow-hidden
+						{infId > 0
+							? 'border-[var(--color-accent)]/60 hover:border-[var(--color-accent)]'
+							: 'border-[var(--color-border)] hover:border-[var(--color-accent)]/50 bg-[var(--color-bg-elev)]'}"
+					title={inf ? inf.name : hasInfusionSupport ? `Add infusion (slot ${i + 1})` : `Infusion slot ${i + 1} (empty)`}
+					aria-label={inf ? `Infusion: ${inf.name}` : `Infusion slot ${i + 1}`}
+				>
+					{#if inf?.icon}
+						<img src={inf.icon} alt="" class="w-full h-full object-cover" />
+					{:else if hasInfusionSupport}
+						<span class="flex items-center justify-center w-full h-full text-[8px] text-[var(--color-text-faint)] leading-none">+</span>
+					{/if}
+				</button>
 			{/each}
 		</div>
 	{/if}
@@ -106,6 +166,14 @@
 			<p class="font-semibold text-sm text-[var(--color-text)] leading-tight">{skin.name}</p>
 			{#if skinType}
 				<p class="text-xs text-[var(--color-text-faint)] mt-0.5">{skinType}</p>
+			{/if}
+			{#if activeInfusions.some((i) => i.id > 0)}
+				<div class="mt-2 pt-2 border-t border-[var(--color-border)]">
+					<p class="text-xs text-[var(--color-text-faint)] mb-1">Infusions</p>
+					{#each activeInfusions.filter((i) => i.id > 0) as { info, id }}
+						<p class="text-xs text-[var(--color-text)]">{info?.name ?? `#${id}`}</p>
+					{/each}
+				</div>
 			{/if}
 			<div class="mt-2 pt-2 border-t border-[var(--color-border)] flex flex-col gap-1.5">
 				<a
@@ -128,3 +196,12 @@
 		</div>
 	{/if}
 </div>
+
+{#if pickerOpen}
+	<InfusionPicker
+		slotLabel="{label} — slot {pickerSlotIndex + 1}"
+		currentId={currentPickerInfusionId}
+		onSelect={handleInfusionSelect}
+		onClose={() => { pickerOpen = false; }}
+	/>
+{/if}

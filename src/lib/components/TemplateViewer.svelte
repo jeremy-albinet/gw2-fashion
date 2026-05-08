@@ -1,11 +1,22 @@
 <script lang="ts">
-	import type { FashionTemplate } from '$lib/gw2/types';
+	import type { FashionTemplate, ArmorSlotId, WeaponSlotId } from '$lib/gw2/types';
 	import { ARMOR_DISPLAY_ORDER, ARMOR_SLOT_LABELS, WEAPON_DISPLAY_ORDER, WEAPON_SLOT_LABELS } from '$lib/gw2/types';
 	import type { Gw2Color, Gw2Skin } from '$lib/gw2/api';
 	import { fetchSkins, fetchColors } from '$lib/gw2/api';
+	import type { OutfitInfusions } from '$lib/storage';
 	import SkinSlot from './SkinSlot.svelte';
 
-	let { template }: { template: FashionTemplate } = $props();
+	let {
+		template,
+		infusions,
+		onInfusionChange
+	}: {
+		template: FashionTemplate;
+		/** Persisted infusion overrides — if provided, these take priority over template.armor[].infusions */
+		infusions?: OutfitInfusions;
+		/** If provided, SkinSlot will render editable infusion buttons */
+		onInfusionChange?: (slot: ArmorSlotId | WeaponSlotId, slotIndex: number, itemId: number) => void;
+	} = $props();
 
 	let skins = $state<Map<number, Gw2Skin>>(new Map());
 	let colors = $state<Map<number, Gw2Color>>(new Map());
@@ -30,6 +41,19 @@
 			loading = false;
 		});
 	});
+
+	function armorInfusions(slot: ArmorSlotId): [number, number, number] {
+		// Persisted overrides take priority; fall back to template (from API import)
+		const override = infusions?.armor?.[slot];
+		if (override) return override;
+		return template.armor[slot].infusions;
+	}
+
+	function weaponInfusions(slot: WeaponSlotId): [number, number] {
+		const override = infusions?.weapons?.[slot];
+		if (override) return override;
+		return template.weaponInfusions?.[slot] ?? [0, 0];
+	}
 
 	const armorSlots = $derived(
 		ARMOR_DISPLAY_ORDER.map((slot) => ({
@@ -60,7 +84,16 @@
 			<h3 class="text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest mb-2">Armor & Back</h3>
 			<div class="bg-[var(--color-bg-elev)] rounded-lg px-3">
 				{#each armorSlots as { slot, label, piece, skin }}
-					<SkinSlot {label} {skin} dyeIds={piece.dyeIds} {colors} />
+					<SkinSlot
+						{label}
+						{skin}
+						dyeIds={piece.dyeIds}
+						{colors}
+						infusions={armorInfusions(slot)}
+						onInfusionChange={onInfusionChange
+							? (slotIndex, itemId) => onInfusionChange!(slot, slotIndex, itemId)
+							: undefined}
+					/>
 				{/each}
 			</div>
 		</section>
@@ -68,8 +101,15 @@
 		<section>
 			<h3 class="text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest mb-2">Weapons</h3>
 			<div class="bg-[var(--color-bg-elev)] rounded-lg px-3">
-				{#each weaponSlots as { slot, label, skinId, skin }}
-					<SkinSlot {label} {skin} />
+				{#each weaponSlots as { slot, label, skin }}
+					<SkinSlot
+						{label}
+						{skin}
+						infusions={weaponInfusions(slot)}
+						onInfusionChange={onInfusionChange
+							? (slotIndex, itemId) => onInfusionChange!(slot, slotIndex, itemId)
+							: undefined}
+					/>
 				{/each}
 			</div>
 
