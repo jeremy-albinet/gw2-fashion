@@ -114,3 +114,80 @@ export function decodeSharePayload(
 		return null;
 	}
 }
+
+export interface BackupOutfit extends StoredOutfit {
+	_images: Record<string, string>;
+}
+
+export interface BackupFile {
+	version: 1;
+	exportedAt: number;
+	outfits: BackupOutfit[];
+}
+
+export async function exportBackup(): Promise<BackupFile> {
+	const outfits = await getAllOutfits();
+	const backupOutfits: BackupOutfit[] = await Promise.all(
+		outfits.map(async (o) => {
+			const _images: Record<string, string> = {};
+			for (const imgId of o.imageIds ?? []) {
+				const blob = await getImage(imgId);
+				if (blob) {
+					const b64 = await new Promise<string>((resolve) => {
+						const reader = new FileReader();
+						reader.onload = () => resolve(reader.result as string);
+						reader.readAsDataURL(blob);
+					});
+					_images[imgId] = b64;
+				}
+			}
+			return { ...o, _images };
+		})
+	);
+	return { version: 1, exportedAt: Date.now(), outfits: backupOutfits };
+}
+
+export async function importBackup(
+	backup: BackupFile,
+	mode: 'merge' | 'replace'
+): Promise<{ imported: number; skipped: number }> {
+	if (backup.version !== 1) throw new Error('Unsupported backup version.');
+
+	if (mode === 'replace') {
+		const existing = await getAllOutfits();
+		for (const o of existing) await deleteOutfit(o.id);
+	}
+
+	const existingIds = new Set((await getAllOutfits()).map((o) => o.id));
+	let imported = 0;
+	let skipped = 0;
+
+	for (const entry of backup.outfits) {
+		if (mode === 'merge' && existingIds.has(entry.id)) {
+			skipped++;
+			continue;
+		}
+
+		const newImageIds: string[] = [];
+		for (const [, dataUrl] of Object.entries(entry._images)) {
+			const res = await fetch(dataUrl);
+			const blob = await res.blob();
+			const id = await saveImage(blob);
+			newImageIds.push(id);
+		}
+
+		const { _images, ...rest } = entry;
+		const now = Date.now();
+		const outfit: StoredOutfit = {
+			...rest,
+			id: mode === 'replace' ? entry.id : crypto.randomUUID(),
+			imageIds: newImageIds,
+			createdAt: rest.createdAt ?? now,
+			updatedAt: rest.updatedAt ?? now
+		};
+		await set(key(outfit.id), outfit);
+		imported++;
+	}
+
+	return { imported, skipped };
+}

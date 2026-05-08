@@ -1,42 +1,44 @@
-# sv
+# gw2-fashion
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A community fashion / wardrobe builder for **Guild Wars 2**. Plan outfits, mix
+and match skins across races, genders and professions, and keep your looks
+saved locally in your browser.
 
-## Creating a project
+> Unofficial fan project. Not affiliated with ArenaNet or NCSOFT.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Features
 
-```sh
-# create a new project
-npx sv create my-app
-```
+- Build outfits with armor, weapon and dye combinations
+- Filter the armory by race, gender and profession
+- Skin tooltips and chat-code copy
+- Optional GW2 API key import to pull characters from your account
+- Local-first storage (IndexedDB) — your data stays in your browser
+- Image upload to attach screenshots to outfits
 
-To recreate this project with the same configuration:
+## Tech
 
-```sh
-# recreate this project
-pnpm dlx sv@0.15.2 create --template minimal --types ts --install pnpm .
-```
+- [SvelteKit](https://svelte.dev/) (Svelte 5, runes)
+- [Tailwind CSS v4](https://tailwindcss.com/)
+- [`adapter-static`](https://svelte.dev/docs/kit/adapter-static) — pure SPA, no server required
+- [`idb-keyval`](https://github.com/jakearchibald/idb-keyval) for local persistence
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
+## Develop
 
 ```sh
-npm run build
+pnpm install
+pnpm dev
 ```
 
-You can preview the production build with `npm run preview`.
+## Build
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```sh
+pnpm build
+```
+
+The static SPA is emitted to `build/`. Any static host works (Cloudflare Pages,
+GitHub Pages, Netlify, S3, …).
+
+## License
+
+[MIT](./LICENSE) — see the license file for the trademark notice regarding
+Guild Wars 2.
