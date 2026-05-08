@@ -25,7 +25,8 @@
 		{@render children()}
 	</main>
 
-	<footer class="border-t border-[var(--color-border)] text-center text-xs text-[var(--color-text-faint)] py-4">
-		GW2 Fashion — data from <a href="https://api.guildwars2.com" class="hover:text-[var(--color-text-dim)] underline" target="_blank" rel="noopener">api.guildwars2.com</a>
+	<footer class="border-t border-[var(--color-border)] text-center text-xs text-[var(--color-text-faint)] py-4 space-y-1">
+		<p>GW2 Fashion — skin data from <a href="https://api.guildwars2.com" class="hover:text-[var(--color-text-dim)] underline" target="_blank" rel="noopener">api.guildwars2.com</a></p>
+		<p>🔒 All your outfits and images are stored locally in your browser — nothing is sent to any server.</p>
 	</footer>
 </div>
