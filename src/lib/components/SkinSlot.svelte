@@ -59,9 +59,9 @@
 	class="relative flex items-center gap-3 py-2 border-b border-[var(--color-border)] last:border-0"
 	onmouseenter={showTooltip}
 	onmouseleave={hideTooltip}
-	onfocus={showTooltip}
-	onblur={hideTooltip}
-	role="row"
+	onfocusin={showTooltip}
+	onfocusout={hideTooltip}
+	role="presentation"
 >
 	<button
 		type="button"
