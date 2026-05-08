@@ -1,8 +1,15 @@
 import { get, set, del, keys } from 'idb-keyval';
 import type { Race, Gender, Profession } from '$lib/gw2/constants';
+import type { ArmorSlotId, WeaponSlotId } from '$lib/gw2/types';
 
 const OUTFIT_PREFIX = 'outfit_';
 const IMAGE_PREFIX = 'img_';
+
+/** Infusion slot assignments for an outfit, stored separately from the fashion template code. */
+export interface OutfitInfusions {
+	armor: Partial<Record<ArmorSlotId, [number, number, number]>>;
+	weapons: Partial<Record<WeaponSlotId, [number, number]>>;
+}
 
 export interface StoredOutfit {
 	id: string;
@@ -14,6 +21,7 @@ export interface StoredOutfit {
 	notes: string;
 	tags: string[];
 	imageIds: string[];
+	infusions?: OutfitInfusions;
 	createdAt: number;
 	updatedAt: number;
 }
@@ -89,14 +97,15 @@ export function encodeSharePayload(outfit: StoredOutfit): string {
 	return btoa(
 		JSON.stringify({
 			name: outfit.name, code: outfit.code, notes: outfit.notes, tags: outfit.tags,
-			race: outfit.race, gender: outfit.gender, profession: outfit.profession
+			race: outfit.race, gender: outfit.gender, profession: outfit.profession,
+			infusions: outfit.infusions ?? null
 		})
 	);
 }
 
 export function decodeSharePayload(
 	hash: string
-): Pick<StoredOutfit, 'name' | 'code' | 'notes' | 'tags' | 'race' | 'gender' | 'profession'> | null {
+): Pick<StoredOutfit, 'name' | 'code' | 'notes' | 'tags' | 'race' | 'gender' | 'profession' | 'infusions'> | null {
 	try {
 		const cleaned = hash.startsWith('#') ? hash.slice(1) : hash;
 		const parsed = JSON.parse(atob(cleaned));
@@ -108,7 +117,8 @@ export function decodeSharePayload(
 			tags: Array.isArray(parsed.tags) ? parsed.tags.filter((t: unknown) => typeof t === 'string') : [],
 			race: parsed.race ?? '',
 			gender: parsed.gender ?? '',
-			profession: parsed.profession ?? ''
+			profession: parsed.profession ?? '',
+			infusions: parsed.infusions ?? undefined
 		};
 	} catch {
 		return null;
