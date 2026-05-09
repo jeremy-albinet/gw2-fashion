@@ -191,6 +191,53 @@ function defaultVisibility(): VisibilityFlags {
 	};
 }
 
+export function encodeFashionTemplate(t: FashionTemplate): string {
+	const bytes = new Uint8Array(EXPECTED_BYTES);
+	const view = new DataView(bytes.buffer);
+	let offset = 0;
+
+	const w16 = (v: number) => { view.setUint16(offset, v, true); offset += 2; };
+
+	bytes[offset++] = FASHION_HEADER;
+
+	w16(t.armor.aquabreather.skinId);
+	for (const slot of ARMOR_PARSE_ORDER) {
+		w16(t.armor[slot].skinId);
+		for (const dye of t.armor[slot].dyeIds) w16(dye);
+	}
+
+	w16(t.outfit.outfitId);
+	for (const dye of t.outfit.dyeIds) w16(dye);
+
+	w16(t.weapons.aquaA);
+	w16(t.weapons.aquaB);
+	w16(t.weapons.setA1);
+	w16(t.weapons.setA2);
+	w16(t.weapons.setB1);
+	w16(t.weapons.setB2);
+
+	const vis = t.visibility;
+	let flags = 0;
+	if (vis.aquabreather) flags |= 1 << 0;
+	if (vis.backpack)     flags |= 1 << 1;
+	if (vis.chest)        flags |= 1 << 2;
+	if (vis.boots)        flags |= 1 << 3;
+	if (vis.gloves)       flags |= 1 << 4;
+	if (vis.helmet)       flags |= 1 << 5;
+	if (vis.leggings)     flags |= 1 << 6;
+	if (vis.shoulders)    flags |= 1 << 7;
+	if (vis.outfit)       flags |= 1 << 8;
+	if (vis.aquaA)        flags |= 1 << 9;
+	if (vis.aquaB)        flags |= 1 << 10;
+	if (vis.setA1)        flags |= 1 << 11;
+	if (vis.setA2)        flags |= 1 << 12;
+	if (vis.setB1)        flags |= 1 << 13;
+	if (vis.setB2)        flags |= 1 << 14;
+	w16(flags);
+
+	return `[&${bytesToBase64(bytes)}]`;
+}
+
 export function equipmentTabToTemplate(tab: Gw2EquipmentTab): FashionTemplate {
 	const armor: Record<ArmorSlotId, ArmorPiece> = {
 		aquabreather: defaultArmorPiece(), backpack: defaultArmorPiece(),
@@ -221,7 +268,7 @@ export function equipmentTabToTemplate(tab: Gw2EquipmentTab): FashionTemplate {
 		}
 	}
 
-	return {
+	const template: FashionTemplate = {
 		armor,
 		outfit,
 		weapons,
@@ -229,4 +276,6 @@ export function equipmentTabToTemplate(tab: Gw2EquipmentTab): FashionTemplate {
 		visibility: defaultVisibility(),
 		raw: ''
 	};
+	template.raw = encodeFashionTemplate(template);
+	return template;
 }
