@@ -150,15 +150,15 @@
 			<div class="grid grid-cols-3 gap-3">
 				<select bind:value={editRace} class="bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]">
 					<option value="">Race</option>
-					{#each RACES as r}<option value={r}>{r}</option>{/each}
+					{#each RACES as r, _i (_i)}<option value={r}>{r}</option>{/each}
 				</select>
 				<select bind:value={editGender} class="bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]">
 					<option value="">Gender</option>
-					{#each GENDERS as g}<option value={g}>{g}</option>{/each}
+					{#each GENDERS as g, _i (_i)}<option value={g}>{g}</option>{/each}
 				</select>
 				<select bind:value={editProfession} class="bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]">
 					<option value="">Profession</option>
-					{#each PROFESSIONS as p}<option value={p}>{p}</option>{/each}
+					{#each PROFESSIONS as p, _i (_i)}<option value={p}>{p}</option>{/each}
 				</select>
 			</div>
 			<textarea
@@ -207,7 +207,7 @@
 				{/if}
 				{#if outfit.tags.length > 0}
 					<div class="flex flex-wrap gap-1 mt-2">
-						{#each outfit.tags as tag}
+						{#each outfit.tags as tag, _i (_i)}
 							<span class="text-xs bg-[var(--color-bg-elev)] border border-[var(--color-border)] text-[var(--color-text-dim)] px-1.5 py-0.5 rounded">{tag}</span>
 						{/each}
 					</div>

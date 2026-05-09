@@ -151,7 +151,7 @@
 				class="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-1.5 text-sm text-[var(--color-text)] placeholder:text-[var(--color-text-faint)] focus:outline-none focus:border-[var(--color-accent)]"
 			/>
 			<div class="flex gap-1 flex-wrap">
-				{#each CATEGORIES as cat}
+				{#each CATEGORIES as cat, _i (_i)}
 					<button
 						type="button"
 						onclick={() => { category = cat; }}

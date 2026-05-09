@@ -39,7 +39,7 @@
 </script>
 
 <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
-	{#each imageIds as id}
+	{#each imageIds as id, _i (_i)}
 		<div class="relative group aspect-square rounded overflow-hidden border border-[var(--color-border)]">
 			{#if urlMap[id]}
 				<img src={urlMap[id]} alt="Screenshot" class="w-full h-full object-cover" />

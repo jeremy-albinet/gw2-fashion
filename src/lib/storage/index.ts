@@ -186,6 +186,7 @@ export async function importBackup(
 			newImageIds.push(id);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { _images, ...rest } = entry;
 		const now = Date.now();
 		const outfit: StoredOutfit = {

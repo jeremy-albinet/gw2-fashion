@@ -70,7 +70,7 @@
 
 		{#if urls.length > 1}
 			<div class="flex gap-2 mt-2 overflow-x-auto pb-1">
-				{#each urls as url, i}
+				{#each urls as url, i (i)}
 					<button
 						onclick={() => { active = i; }}
 						class="flex-shrink-0 w-16 h-16 rounded overflow-hidden border-2 transition-colors

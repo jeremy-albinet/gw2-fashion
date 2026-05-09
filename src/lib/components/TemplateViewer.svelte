@@ -83,7 +83,7 @@
 		<section>
 			<h3 class="text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest mb-2">Armor & Back</h3>
 			<div class="bg-[var(--color-bg-elev)] rounded-lg px-3">
-				{#each armorSlots as { slot, label, piece, skin }}
+				{#each armorSlots as { slot, label, piece, skin } (slot)}
 					<SkinSlot
 						{label}
 						{skin}
@@ -101,7 +101,7 @@
 		<section>
 			<h3 class="text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest mb-2">Weapons</h3>
 			<div class="bg-[var(--color-bg-elev)] rounded-lg px-3">
-				{#each weaponSlots as { slot, label, skin }}
+				{#each weaponSlots as { slot, label, skin } (slot)}
 					<SkinSlot
 						{label}
 						{skin}

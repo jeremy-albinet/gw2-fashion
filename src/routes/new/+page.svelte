@@ -89,7 +89,6 @@
 		if (race) raceInput = race;
 		if (gender) genderInput = gender;
 		if (profession) professionInput = profession;
-		activeTab = 'code';
 	}
 
 	async function handleSave() {
@@ -127,7 +126,7 @@
 	<h1 class="font-display text-2xl text-[var(--color-text)] mb-6">Add Outfit</h1>
 
 	<div class="flex gap-0 mb-0 border-b border-[var(--color-border)]">
-		{#each ([['api', 'From Characters'], ['code', 'Paste Code']] as const) as [id, label]}
+		{#each ([['api', 'From Characters'], ['code', 'Paste Code']] as const) as [id, label], _i (_i)}
 			<button
 				type="button"
 				onclick={() => { activeTab = id; }}
@@ -173,21 +172,21 @@
 						<label for="race" class={labelClass}>Race</label>
 						<select id="race" bind:value={raceInput} class={selectClass}>
 							<option value="">Any</option>
-							{#each RACES as r}<option value={r}>{r}</option>{/each}
+							{#each RACES as r, _i (_i)}<option value={r}>{r}</option>{/each}
 						</select>
 					</div>
 					<div>
 						<label for="gender" class={labelClass}>Gender</label>
 						<select id="gender" bind:value={genderInput} class={selectClass}>
 							<option value="">Any</option>
-							{#each GENDERS as g}<option value={g}>{g}</option>{/each}
+							{#each GENDERS as g, _i (_i)}<option value={g}>{g}</option>{/each}
 						</select>
 					</div>
 					<div>
 						<label for="profession" class={labelClass}>Profession</label>
 						<select id="profession" bind:value={professionInput} class={selectClass}>
 							<option value="">Any</option>
-							{#each PROFESSIONS as p}<option value={p}>{p}</option>{/each}
+							{#each PROFESSIONS as p, _i (_i)}<option value={p}>{p}</option>{/each}
 						</select>
 					</div>
 				</div>

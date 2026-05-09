@@ -74,7 +74,7 @@
 <div class="space-y-3">
 	{#if images.length > 0}
 		<div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
-			{#each images as img, i}
+			{#each images as img, i (i)}
 				<div class="relative group aspect-square rounded overflow-hidden border border-[var(--color-border)]">
 					<img src={img.preview} alt="Screenshot {i + 1}" class="w-full h-full object-cover" />
 					<button

@@ -89,7 +89,7 @@
 			<span class="text-[10px] text-[var(--color-text-faint)] uppercase tracking-widest px-1">Race</span>
 			<select bind:value={filterRace} class={selectClass}>
 				<option value="">Any</option>
-				{#each RACES as r}<option value={r}>{r}</option>{/each}
+				{#each RACES as r, _i (_i)}<option value={r}>{r}</option>{/each}
 			</select>
 		</div>
 
@@ -97,7 +97,7 @@
 			<span class="text-[10px] text-[var(--color-text-faint)] uppercase tracking-widest px-1">Gender</span>
 			<select bind:value={filterGender} class={selectClass}>
 				<option value="">Any</option>
-				{#each GENDERS as g}<option value={g}>{g}</option>{/each}
+				{#each GENDERS as g, _i (_i)}<option value={g}>{g}</option>{/each}
 			</select>
 		</div>
 
@@ -105,7 +105,7 @@
 			<span class="text-[10px] text-[var(--color-text-faint)] uppercase tracking-widest px-1">Profession</span>
 			<select bind:value={filterProfession} class={selectClass}>
 				<option value="">Any</option>
-				{#each PROFESSIONS as p}<option value={p}>{p}</option>{/each}
+				{#each PROFESSIONS as p, _i (_i)}<option value={p}>{p}</option>{/each}
 			</select>
 		</div>
 
@@ -114,7 +114,7 @@
 				<span class="text-[10px] text-[var(--color-text-faint)] uppercase tracking-widest px-1">Tag</span>
 				<select bind:value={filterTag} class={selectClass}>
 					<option value="">Any</option>
-					{#each allTags as t}<option value={t}>{t}</option>{/each}
+					{#each allTags as t, _i (_i)}<option value={t}>{t}</option>{/each}
 				</select>
 			</div>
 		{/if}

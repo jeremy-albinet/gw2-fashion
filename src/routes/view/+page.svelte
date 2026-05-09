@@ -79,7 +79,7 @@
 			{/if}
 			{#if tags.length > 0}
 				<div class="flex flex-wrap gap-1 mt-2">
-					{#each tags as tag}
+					{#each tags as tag, _i (_i)}
 						<span class="text-xs bg-[var(--color-bg-elev)] border border-[var(--color-border)] text-[var(--color-text-dim)] px-1.5 py-0.5 rounded">{tag}</span>
 					{/each}
 				</div>

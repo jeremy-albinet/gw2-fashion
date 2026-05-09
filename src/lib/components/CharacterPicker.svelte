@@ -72,7 +72,7 @@
 			race = char.race as Race;
 			gender = char.gender as Gender;
 			profession = char.profession as Profession;
-		} catch { }
+		} catch { /* character info is optional — ignore fetch errors */ }
 
 		onSelect(template, `${selectedChar} — ${tabLabel}`, race, gender, profession);
 	}
@@ -101,7 +101,7 @@
 				class="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]"
 			>
 				<option value="">— Pick a character —</option>
-				{#each characters as char}
+				{#each characters as char, _i (_i)}
 					<option value={char}>{char}</option>
 				{/each}
 			</select>
@@ -118,7 +118,7 @@
 					onchange={(e) => { selectedTab = Number((e.currentTarget as HTMLSelectElement).value); }}
 					class="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]"
 				>
-					{#each tabs as tab}
+					{#each tabs as tab, _i (_i)}
 						<option value={tab.tab}>{tab.name || `Tab ${tab.tab}`}{tab.is_active ? ' (active)' : ''}</option>
 					{/each}
 				</select>
