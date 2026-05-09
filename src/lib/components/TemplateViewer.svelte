@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { FashionTemplate, ArmorSlotId, WeaponSlotId } from '$lib/gw2/types';
-	import { ARMOR_DISPLAY_ORDER, ARMOR_SLOT_LABELS, WEAPON_DISPLAY_ORDER, WEAPON_SLOT_LABELS } from '$lib/gw2/types';
+	import { ARMOR_DISPLAY_ORDER, ARMOR_SLOT_LABELS, WEAPON_SLOT_LABELS } from '$lib/gw2/types';
 	import type { Gw2Color, Gw2Skin } from '$lib/gw2/api';
 	import { fetchSkins, fetchColors } from '$lib/gw2/api';
 	import type { OutfitInfusions } from '$lib/storage';
@@ -64,14 +64,35 @@
 		})).filter((s) => s.skin || s.piece.skinId === 0)
 	);
 
-	const weaponSlots = $derived(
-		WEAPON_DISPLAY_ORDER.map((slot) => ({
-			slot,
-			label: WEAPON_SLOT_LABELS[slot],
-			skinId: template.weapons[slot],
-			skin: template.weapons[slot] > 0 ? skins.get(template.weapons[slot]) : undefined
-		}))
-	);
+	const weaponGroups = $derived([
+		{
+			label: 'Weapon Set I',
+			slots: (['setA1', 'setA2'] as WeaponSlotId[]).map((slot) => ({
+				slot,
+				label: WEAPON_SLOT_LABELS[slot],
+				skinId: template.weapons[slot],
+				skin: template.weapons[slot] > 0 ? skins.get(template.weapons[slot]) : undefined
+			}))
+		},
+		{
+			label: 'Weapon Set II',
+			slots: (['setB1', 'setB2'] as WeaponSlotId[]).map((slot) => ({
+				slot,
+				label: WEAPON_SLOT_LABELS[slot],
+				skinId: template.weapons[slot],
+				skin: template.weapons[slot] > 0 ? skins.get(template.weapons[slot]) : undefined
+			}))
+		},
+		{
+			label: 'Aquatic',
+			slots: (['aquaA', 'aquaB'] as WeaponSlotId[]).map((slot) => ({
+				slot,
+				label: WEAPON_SLOT_LABELS[slot],
+				skinId: template.weapons[slot],
+				skin: template.weapons[slot] > 0 ? skins.get(template.weapons[slot]) : undefined
+			}))
+		}
+	]);
 
 	const hasOutfit = $derived(template.outfit.outfitId > 0);
 </script>
@@ -100,16 +121,23 @@
 
 		<section>
 			<h3 class="text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest mb-2">Weapons</h3>
-			<div class="bg-[var(--color-bg-elev)] rounded-lg px-3">
-				{#each weaponSlots as { slot, label, skin } (slot)}
-					<SkinSlot
-						{label}
-						{skin}
-						infusions={weaponInfusions(slot)}
-						onInfusionChange={onInfusionChange
-							? (slotIndex, itemId) => onInfusionChange!(slot, slotIndex, itemId)
-							: undefined}
-					/>
+			<div class="flex flex-col gap-2">
+				{#each weaponGroups as group (group.label)}
+					<div>
+						<div class="text-[10px] font-semibold text-[var(--color-text-faint)] uppercase tracking-widest mb-1">{group.label}</div>
+						<div class="bg-[var(--color-bg-elev)] rounded-lg px-3">
+							{#each group.slots as { slot, label, skin } (slot)}
+								<SkinSlot
+									{label}
+									{skin}
+									infusions={weaponInfusions(slot)}
+									onInfusionChange={onInfusionChange
+										? (slotIndex, itemId) => onInfusionChange!(slot, slotIndex, itemId)
+										: undefined}
+								/>
+							{/each}
+						</div>
+					</div>
 				{/each}
 			</div>
 
