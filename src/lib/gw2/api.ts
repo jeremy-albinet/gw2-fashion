@@ -114,6 +114,28 @@ export function dyeSwatchRgb(color: Gw2Color): [number, number, number] {
 	return color.cloth?.rgb ?? color.leather?.rgb ?? color.metal?.rgb ?? color.base_rgb;
 }
 
+const ACCOUNT_CACHE_TTL_MS = 5 * 60 * 1000;
+
+interface CacheEntry<T> {
+	data: T;
+	cachedAt: number;
+}
+
+async function getCached<T>(key: string): Promise<T | null> {
+	const entry = await get<CacheEntry<T>>(key);
+	if (!entry) return null;
+	if (Date.now() - entry.cachedAt > ACCOUNT_CACHE_TTL_MS) return null;
+	return entry.data;
+}
+
+async function setCached<T>(key: string, data: T): Promise<void> {
+	await set(key, { data, cachedAt: Date.now() } satisfies CacheEntry<T>);
+}
+
+async function bustCache(key: string): Promise<void> {
+	await set(key, null);
+}
+
 const API_KEY_STORE = 'gw2_api_key';
 const inMemoryApiKey: { value: string | null } = { value: null };
 
@@ -168,17 +190,34 @@ export async function fetchAccount(key: string): Promise<Gw2AccountInfo> {
 	return res.json();
 }
 
-export async function fetchCharacterNames(key: string): Promise<string[]> {
+const CACHE_KEY_CHARACTERS = 'gw2_cache_characters';
+const cacheKeyEquipmentTabs = (name: string) => `gw2_cache_equipment_${name}`;
+const cacheKeyCharacter = (name: string) => `gw2_cache_character_${name}`;
+
+export async function fetchCharacterNames(key: string, bustTtl = false): Promise<string[]> {
+	if (!bustTtl) {
+		const cached = await getCached<string[]>(CACHE_KEY_CHARACTERS);
+		if (cached) return cached;
+	}
 	const res = await fetch(authedUrl('/characters', key));
 	if (!res.ok) throw new Error(`API error ${res.status}: ${await res.text()}`);
-	return res.json();
+	const data: string[] = await res.json();
+	await setCached(CACHE_KEY_CHARACTERS, data);
+	return data;
 }
 
-export async function fetchEquipmentTabs(key: string, characterName: string): Promise<Gw2EquipmentTab[]> {
+export async function fetchEquipmentTabs(key: string, characterName: string, bustTtl = false): Promise<Gw2EquipmentTab[]> {
+	const cacheKey = cacheKeyEquipmentTabs(characterName);
+	if (!bustTtl) {
+		const cached = await getCached<Gw2EquipmentTab[]>(cacheKey);
+		if (cached) return cached;
+	}
 	const url = authedUrl(`/characters/${encodeURIComponent(characterName)}/equipmenttabs?tabs=all&v=latest`, key);
 	const res = await fetch(url);
 	if (!res.ok) throw new Error(`API error ${res.status}: ${await res.text()}`);
-	return res.json();
+	const data: Gw2EquipmentTab[] = await res.json();
+	await setCached(cacheKey, data);
+	return data;
 }
 
 export interface Gw2Character {
@@ -188,8 +227,25 @@ export interface Gw2Character {
 	profession: string;
 }
 
-export async function fetchCharacter(key: string, characterName: string): Promise<Gw2Character> {
+export async function fetchCharacter(key: string, characterName: string, bustTtl = false): Promise<Gw2Character> {
+	const cacheKey = cacheKeyCharacter(characterName);
+	if (!bustTtl) {
+		const cached = await getCached<Gw2Character>(cacheKey);
+		if (cached) return cached;
+	}
 	const res = await fetch(authedUrl(`/characters/${encodeURIComponent(characterName)}?v=latest`, key));
 	if (!res.ok) throw new Error(`API error ${res.status}: ${await res.text()}`);
-	return res.json();
+	const data: Gw2Character = await res.json();
+	await setCached(cacheKey, data);
+	return data;
+}
+
+export async function bustCharacterCache(characterName?: string): Promise<void> {
+	await bustCache(CACHE_KEY_CHARACTERS);
+	if (characterName) {
+		await Promise.all([
+			bustCache(cacheKeyEquipmentTabs(characterName)),
+			bustCache(cacheKeyCharacter(characterName)),
+		]);
+	}
 }
