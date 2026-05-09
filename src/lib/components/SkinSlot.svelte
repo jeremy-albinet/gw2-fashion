@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Gw2Color, Gw2Skin } from '$lib/gw2/api';
+	import { dyeSwatchRgb } from '$lib/gw2/api';
 	import { skinWardrobeLink, wikiUrl } from '$lib/gw2/chatlink';
 	import DyeSwatch from './DyeSwatch.svelte';
 	import InfusionPicker from './InfusionPicker.svelte';
@@ -26,9 +27,13 @@
 	} = $props();
 
 	const hasDyes = $derived(!!dyeIds && !!colors);
-	const activeDyes = $derived(
-		hasDyes ? dyeIds!.filter((id) => id > 1).map((id) => colors!.get(id)) : []
+	// All 4 slots resolved; undefined = empty (id <= 1)
+	const allDyes = $derived(
+		hasDyes ? dyeIds!.map((id): Gw2Color | undefined => (id > 1 ? colors!.get(id) : undefined)) : []
 	);
+	const activeDyes = $derived(allDyes.filter((d): d is Gw2Color => d !== undefined));
+	// How many of the 4 slots are non-empty — determines layout
+	const dyeCount = $derived(activeDyes.length);
 
 	const activeInfusions = $derived(
 		(infusions ?? []).map((id, i) => ({ id, index: i, info: id > 0 ? INFUSION_MAP.get(id) : undefined }))
@@ -51,7 +56,7 @@
 		requestAnimationFrame(() => {
 			if (!tooltipEl || !wrapperEl) return;
 			const rect = wrapperEl.getBoundingClientRect();
-			above = rect.bottom + 120 > window.innerHeight;
+			above = rect.bottom + 140 > window.innerHeight;
 		});
 	}
 	function hideTooltip() {
@@ -86,6 +91,12 @@
 	);
 
 	const currentPickerInfusionId = $derived(infusions?.[pickerSlotIndex] ?? 0);
+
+	function dyeSwatchStyle(color: Gw2Color | undefined): string {
+		if (!color) return 'background:#1a1318';
+		const rgb = dyeSwatchRgb(color);
+		return `background:rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+	}
 </script>
 
 <div
@@ -122,19 +133,39 @@
 		{/if}
 	</div>
 
-	<!-- Dyes -->
-	{#if hasDyes && activeDyes.length > 0}
-		<div class="flex gap-0.5 shrink-0">
-			{#each activeDyes as dye}
-				<DyeSwatch color={dye} size={14} />
-			{/each}
-		</div>
+	<!-- Dyes — GW2-style layout: always a compact grid, size depends on slot count -->
+	{#if hasDyes && dyeCount > 0}
+		{#if dyeCount === 4}
+			<!-- 2×2 grid -->
+			<div class="grid grid-cols-2 gap-px shrink-0">
+				{#each allDyes as dye, i (i)}
+					<DyeSwatch color={dye} size={10} />
+				{/each}
+			</div>
+		{:else if dyeCount === 3}
+			<!-- 2 small top, 1 wide bottom spanning full width -->
+			<div class="shrink-0 flex flex-col gap-px" style="width:21px">
+				<div class="flex gap-px">
+					{#each allDyes.slice(0, 2) as dye, i (i)}
+						<DyeSwatch color={dye} size={10} />
+					{/each}
+				</div>
+				<DyeSwatch color={allDyes[2]} width={21} height={10} />
+			</div>
+		{:else}
+			<!-- 1 or 2 dyes: simple row -->
+			<div class="flex gap-px shrink-0">
+				{#each activeDyes as dye, i (i)}
+					<DyeSwatch color={dye} size={10} />
+				{/each}
+			</div>
+		{/if}
 	{/if}
 
 	<!-- Infusion slots -->
 	{#if infusions !== undefined}
 		<div class="flex gap-0.5 shrink-0">
-			{#each (infusions as number[]) as infId, i}
+			{#each (infusions as number[]) as infId, i (i)}
 				{@const inf = infId > 0 ? INFUSION_MAP.get(infId) : undefined}
 				<button
 					type="button"
@@ -159,7 +190,7 @@
 	{#if tooltipVisible && skin}
 		<div
 			bind:this={tooltipEl}
-			class="absolute left-0 z-30 w-52 bg-[var(--color-bg-elev)] border border-[var(--color-border)] rounded-lg shadow-xl p-3 pointer-events-auto
+			class="absolute left-0 z-30 w-56 bg-[var(--color-bg-elev)] border border-[var(--color-border)] rounded-lg shadow-xl p-3 pointer-events-auto
 				{above ? 'bottom-full mb-1' : 'top-full mt-1'}"
 			role="tooltip"
 		>
@@ -167,10 +198,29 @@
 			{#if skinType}
 				<p class="text-xs text-[var(--color-text-faint)] mt-0.5">{skinType}</p>
 			{/if}
+
+			<!-- Dyes in tooltip -->
+			{#if activeDyes.length > 0}
+				<div class="mt-2 pt-2 border-t border-[var(--color-border)]">
+					<p class="text-xs text-[var(--color-text-faint)] mb-1.5">Dyes</p>
+					<div class="flex flex-col gap-1">
+						{#each activeDyes as dye (dye.id)}
+							<div class="flex items-center gap-2">
+								<span
+									class="w-3.5 h-3.5 rounded-sm border border-white/20 flex-shrink-0"
+									style={dyeSwatchStyle(dye)}
+								></span>
+								<span class="text-xs text-[var(--color-text)] truncate">{dye.name}</span>
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/if}
+
 			{#if activeInfusions.some((i) => i.id > 0)}
 				<div class="mt-2 pt-2 border-t border-[var(--color-border)]">
 					<p class="text-xs text-[var(--color-text-faint)] mb-1">Infusions</p>
-					{#each activeInfusions.filter((i) => i.id > 0) as { info, id }}
+					{#each activeInfusions.filter((i) => i.id > 0) as { info, id } (id)}
 						<p class="text-xs text-[var(--color-text)]">{info?.name ?? `#${id}`}</p>
 					{/each}
 				</div>
