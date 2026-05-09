@@ -38,7 +38,11 @@
 		outfit = o;
 		template = decodeFashionTemplate(o.code);
 		infusions = o.infusions ?? { armor: {}, weapons: {} };
-		shareUrl = `${window.location.origin}/view#${encodeSharePayload(o)}`;
+		try {
+			shareUrl = `${window.location.origin}/view#${encodeSharePayload(o)}`;
+		} catch {
+			shareUrl = '';
+		}
 	});
 
 	async function handleInfusionChange(slot: ArmorSlotId | WeaponSlotId, slotIndex: number, itemId: number) {

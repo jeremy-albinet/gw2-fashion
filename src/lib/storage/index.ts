@@ -38,11 +38,15 @@ function newId(): string {
 	return crypto.randomUUID();
 }
 
+function toPlain<T>(value: T): T {
+	return JSON.parse(JSON.stringify(value));
+}
+
 export async function saveOutfit(
 	outfit: Omit<StoredOutfit, 'id' | 'createdAt' | 'updatedAt'>
 ): Promise<StoredOutfit> {
 	const now = Date.now();
-	const full: StoredOutfit = { ...outfit, id: newId(), createdAt: now, updatedAt: now };
+	const full: StoredOutfit = toPlain({ ...outfit, id: newId(), createdAt: now, updatedAt: now });
 	await set(key(full.id), full);
 	return full;
 }
@@ -53,7 +57,7 @@ export async function updateOutfit(
 ): Promise<StoredOutfit | null> {
 	const existing = await get<StoredOutfit>(key(id));
 	if (!existing) return null;
-	const updated: StoredOutfit = { ...existing, ...patch, id, updatedAt: Date.now() };
+	const updated: StoredOutfit = toPlain({ ...existing, ...patch, id, updatedAt: Date.now() });
 	await set(key(id), updated);
 	return updated;
 }
@@ -94,13 +98,12 @@ export async function deleteImages(ids: string[]): Promise<void> {
 }
 
 export function encodeSharePayload(outfit: StoredOutfit): string {
-	return btoa(
-		JSON.stringify({
-			name: outfit.name, code: outfit.code, notes: outfit.notes, tags: outfit.tags,
-			race: outfit.race, gender: outfit.gender, profession: outfit.profession,
-			infusions: outfit.infusions ?? null
-		})
-	);
+	const json = JSON.stringify({
+		name: outfit.name, code: outfit.code, notes: outfit.notes, tags: outfit.tags,
+		race: outfit.race, gender: outfit.gender, profession: outfit.profession,
+		infusions: outfit.infusions ?? null
+	});
+	return btoa(unescape(encodeURIComponent(json)));
 }
 
 export function decodeSharePayload(
@@ -108,7 +111,7 @@ export function decodeSharePayload(
 ): Pick<StoredOutfit, 'name' | 'code' | 'notes' | 'tags' | 'race' | 'gender' | 'profession' | 'infusions'> | null {
 	try {
 		const cleaned = hash.startsWith('#') ? hash.slice(1) : hash;
-		const parsed = JSON.parse(atob(cleaned));
+		const parsed = JSON.parse(decodeURIComponent(escape(atob(cleaned))));
 		if (typeof parsed.code !== 'string') return null;
 		return {
 			name: typeof parsed.name === 'string' ? parsed.name : 'Untitled',

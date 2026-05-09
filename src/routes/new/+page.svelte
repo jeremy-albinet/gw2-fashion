@@ -94,23 +94,27 @@
 	async function handleSave() {
 		if (!decoded) return;
 		saving = true;
-		const tags = tagsInput.split(',').map((t) => t.trim()).filter(Boolean);
-		const imageIds = await Promise.all(images.map((img) => saveImage(img.file)));
-		const hasInfusions =
-			Object.values(infusions.armor).some((v) => v?.some((id) => id > 0)) ||
-			Object.values(infusions.weapons).some((v) => v?.some((id) => id > 0));
-		const outfit = await saveOutfit({
-			name: nameInput.trim() || 'Untitled',
-			code: decoded.raw,
-			race: raceInput,
-			gender: genderInput,
-			profession: professionInput,
-			notes: notesInput.trim(),
-			tags,
-			imageIds,
-			infusions: hasInfusions ? infusions : undefined
-		});
-		goto(`/outfit/${outfit.id}`);
+		try {
+			const tags = tagsInput.split(',').map((t) => t.trim()).filter(Boolean);
+			const imageIds = await Promise.all(images.map((img) => saveImage(img.file)));
+			const hasInfusions =
+				Object.values(infusions.armor).some((v) => v?.some((id) => id > 0)) ||
+				Object.values(infusions.weapons).some((v) => v?.some((id) => id > 0));
+			const outfit = await saveOutfit({
+				name: nameInput.trim() || 'Untitled',
+				code: decoded.raw,
+				race: raceInput,
+				gender: genderInput,
+				profession: professionInput,
+				notes: notesInput.trim(),
+				tags,
+				imageIds,
+				infusions: hasInfusions ? infusions : undefined
+			});
+			goto(`/outfit/${outfit.id}`);
+		} finally {
+			saving = false;
+		}
 	}
 
 	const selectClass = "w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]";
