@@ -31,7 +31,9 @@
 		"eslint": "^10.3.0",
 		"eslint-plugin-svelte": "^3.17.1",
 		"globals": "^17.6.0",
+		"lint-staged": "^17.0.2",
 		"postcss": "^8.5.14",
+		"simple-git-hooks": "^2.13.1",
 		"svelte": "^5.55.2",
 		"svelte-check": "^4.4.6",
 		"tailwindcss": "^4.2.4",
@@ -40,5 +42,11 @@
 	},
 	"dependencies": {
 		"idb-keyval": "^6.2.2"
+	},
+	"simple-git-hooks": {
+		"pre-commit": "pnpm lint-staged"
+	},
+	"lint-staged": {
+		"*.{svelte,ts}": "eslint --fix"
 	}
 }
