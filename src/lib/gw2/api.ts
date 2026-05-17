@@ -4,6 +4,9 @@ const BASE = 'https://api.guildwars2.com/v2';
 const CACHE_PREFIX_SKIN = 'gw2_skin_';
 const CACHE_PREFIX_COLOR = 'gw2_color_';
 const CACHE_PREFIX_ITEM = 'gw2_item_';
+const CACHE_PREFIX_MOUNT_SKIN = 'gw2_mount_skin_';
+const CACHE_PREFIX_GLIDER = 'gw2_glider_';
+const CACHE_PREFIX_SKIFF = 'gw2_skiff_';
 
 export interface Gw2Skin {
 	id: number;
@@ -104,6 +107,43 @@ export async function fetchColors(ids: number[]): Promise<Map<number, Gw2Color>>
 
 export async function fetchItems(ids: number[]): Promise<Map<number, Gw2Item>> {
 	return batchFetch(ids, 'items', CACHE_PREFIX_ITEM, inMemoryItems);
+}
+
+export interface Gw2MountSkin {
+	id: number;
+	name: string;
+	icon: string;
+	mount: string;
+	dye_slots: { color_id: number; material: string }[];
+}
+
+export interface Gw2Glider {
+	id: number;
+	name: string;
+	icon: string;
+	default_dyes: number[];
+}
+
+export interface Gw2Skiff {
+	id: number;
+	name: string;
+	icon: string;
+}
+
+const inMemoryMountSkins = new Map<number, Gw2MountSkin>();
+const inMemoryGliders = new Map<number, Gw2Glider>();
+const inMemorySkiffs = new Map<number, Gw2Skiff>();
+
+export async function fetchMountSkins(ids: number[]): Promise<Map<number, Gw2MountSkin>> {
+	return batchFetch(ids, 'mounts/skins', CACHE_PREFIX_MOUNT_SKIN, inMemoryMountSkins);
+}
+
+export async function fetchGliders(ids: number[]): Promise<Map<number, Gw2Glider>> {
+	return batchFetch(ids, 'gliders', CACHE_PREFIX_GLIDER, inMemoryGliders);
+}
+
+export async function fetchSkiffs(ids: number[]): Promise<Map<number, Gw2Skiff>> {
+	return batchFetch(ids, 'skiffs', CACHE_PREFIX_SKIFF, inMemorySkiffs);
 }
 
 export function skinIconUrl(icon: string): string {
