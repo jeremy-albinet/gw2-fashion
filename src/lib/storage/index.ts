@@ -1,5 +1,6 @@
 import { get, set, del, keys } from 'idb-keyval';
 import type { Race, Gender, Profession } from '$lib/gw2/constants';
+import type { TravelTemplate } from '$lib/gw2/types';
 
 const OUTFIT_PREFIX = 'outfit_';
 const IMAGE_PREFIX = 'img_';
@@ -25,6 +26,7 @@ export interface OutfitTab {
 	id: string;
 	label: string;
 	code: string;
+	travel?: TravelTemplate;
 	imageIds: string[];
 	infusions?: OutfitInfusions;
 }
@@ -142,7 +144,8 @@ export function encodeSharePayload(outfit: StoredOutfit): string {
 	const json = JSON.stringify({
 		name: outfit.name, code: tab.code, notes: outfit.notes, tags: outfit.tags,
 		race: outfit.race, gender: outfit.gender, profession: outfit.profession,
-		infusions: tab.infusions ?? null
+		infusions: tab.infusions ?? null,
+		travel: tab.travel ?? null
 	});
 	return btoa(unescape(encodeURIComponent(json)));
 }
@@ -158,6 +161,7 @@ export function decodeSharePayload(
 	gender: Gender | '';
 	profession: Profession | '';
 	infusions?: OutfitInfusions;
+	travel?: TravelTemplate;
 } | null {
 	try {
 		const cleaned = hash.startsWith('#') ? hash.slice(1) : hash;
@@ -171,7 +175,8 @@ export function decodeSharePayload(
 			race: parsed.race ?? '',
 			gender: parsed.gender ?? '',
 			profession: parsed.profession ?? '',
-			infusions: parsed.infusions ?? undefined
+			infusions: parsed.infusions ?? undefined,
+			travel: parsed.travel ?? undefined
 		};
 	} catch {
 		return null;
