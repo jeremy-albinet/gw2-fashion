@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { decodeFashionTemplate, FashionTemplateError } from '$lib/gw2/decoder';
-	import { isFashionTemplateCode } from '$lib/gw2/decoder';
+	import { decodeFashionTemplate, FashionTemplateError, isFashionTemplateCode, decodeTravelTemplate, isTravelTemplateCode, TravelTemplateError } from '$lib/gw2/decoder';
 	import { saveOutfit, saveImage, aggregateInfusions, type OutfitInfusions } from '$lib/storage';
 	import TemplateViewer from '$lib/components/TemplateViewer.svelte';
 	import ImageUploader from '$lib/components/ImageUploader.svelte';
 	import CharacterPicker from '$lib/components/CharacterPicker.svelte';
-	import type { FashionTemplate } from '$lib/gw2/types';
+	import type { FashionTemplate, TravelTemplate } from '$lib/gw2/types';
 	import { RACES, GENDERS, PROFESSIONS, type Race, type Gender, type Profession } from '$lib/gw2/constants';
 
 	type Tab = 'code' | 'api';
 	let activeTab = $state<Tab>('api');
 
 	let codeInput = $state('');
+	let travelCodeInput = $state('');
 	let nameInput = $state('');
 	let raceInput = $state<Race | ''>('');
 	let genderInput = $state<Gender | ''>('');
@@ -21,7 +21,9 @@
 	let tagsInput = $state('');
 	let images = $state<{ file: File; preview: string }[]>([]);
 	let decoded = $state<FashionTemplate | null>(null);
+	let decodedTravel = $state<TravelTemplate | null>(null);
 	let error = $state<string | null>(null);
+	let travelError = $state<string | null>(null);
 	let saving = $state(false);
 
 	let infusions = $state<OutfitInfusions>({ items: [] });
@@ -50,6 +52,29 @@
 		} else if (codeInput.trim()) {
 			error = null;
 			decoded = null;
+		}
+	});
+
+	function handleTravelDecode() {
+		travelError = null;
+		decodedTravel = null;
+		try {
+			decodedTravel = decodeTravelTemplate(travelCodeInput);
+		} catch (e) {
+			if (e instanceof TravelTemplateError) {
+				travelError = e.message;
+			} else {
+				travelError = 'Unexpected error decoding travel code.';
+			}
+		}
+	}
+
+	$effect(() => {
+		if (travelCodeInput.trim() && isTravelTemplateCode(travelCodeInput)) {
+			handleTravelDecode();
+		} else if (travelCodeInput.trim()) {
+			travelError = null;
+			decodedTravel = null;
 		}
 	});
 
@@ -87,6 +112,7 @@
 					id: crypto.randomUUID(),
 					label: '',
 					code: decoded.raw,
+					travel: decodedTravel ?? undefined,
 					imageIds,
 					infusions: infusions.items.length > 0 ? infusions : undefined
 				}]
@@ -140,6 +166,24 @@
 			{#if error}
 				<div class="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded px-3 py-2">{error}</div>
 			{/if}
+			<div>
+				<label for="travel-code" class={labelClass}>
+					Travel Template Code <span class="font-normal text-[var(--color-text-faint)] normal-case tracking-normal">(optional)</span>
+				</label>
+				<textarea
+					id="travel-code"
+					bind:value={travelCodeInput}
+					placeholder="[&EAAA…]"
+					rows="2"
+					class="{inputClass} font-mono resize-none"
+				></textarea>
+				<p class="text-xs text-[var(--color-text-faint)] mt-1">
+					Copy the travel template code from in-game (the <code class="font-mono">[&amp;…]</code> string in the Travel panel). Saves mounts, glider, and skiff skins &amp; dyes.
+				</p>
+			</div>
+			{#if travelError}
+				<div class="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded px-3 py-2">{travelError}</div>
+			{/if}
 		{:else}
 			<CharacterPicker onSelect={handleCharacterSelect} />
 		{/if}
@@ -185,7 +229,7 @@
 				<div class="border-t border-[var(--color-border)] pt-4">
 					<h2 class="text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest mb-3">Preview</h2>
 					<p class="text-xs text-[var(--color-text-faint)] mb-3">Use the right column to add infusions.</p>
-					<TemplateViewer template={decoded} {infusions} onInfusionsChange={handleInfusionsChange} />
+					<TemplateViewer template={decoded} travel={decodedTravel ?? undefined} {infusions} onInfusionsChange={handleInfusionsChange} />
 				</div>
 
 				<div class="border-t border-[var(--color-border)] pt-4 space-y-4">
