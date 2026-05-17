@@ -5,8 +5,11 @@ import type {
 	OutfitPiece,
 	VisibilityFlags,
 	WeaponSet,
-	WeaponSlotId
+	WeaponSlotId,
+	TravelTemplate,
+	TravelSlotPiece
 } from './types';
+import { TRAVEL_SLOT_ORDER } from './types';
 
 const FASHION_HEADER = 0x0f;
 const EXPECTED_BYTES = 97;
@@ -136,7 +139,79 @@ export function isFashionTemplateCode(input: string): boolean {
 	}
 }
 
-/** Parse an item chat link [&AgH...] and return the item ID, or null if not valid. */
+const TRAVEL_HEADER = 0x10;
+const TRAVEL_EXPECTED_BYTES = 123;
+const TRAVEL_TERMINATOR = 0x0fff;
+
+export class TravelTemplateError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = 'TravelTemplateError';
+	}
+}
+
+export function decodeTravelTemplate(input: string): TravelTemplate {
+	const stripped = stripChatLink(input);
+	if (!stripped) throw new TravelTemplateError('Empty code.');
+
+	let bytes: Uint8Array;
+	try {
+		bytes = base64ToBytes(stripped);
+	} catch {
+		throw new TravelTemplateError('Code is not valid base64.');
+	}
+
+	if (bytes.length !== TRAVEL_EXPECTED_BYTES) {
+		throw new TravelTemplateError(
+			`Expected ${TRAVEL_EXPECTED_BYTES}-byte travel template, got ${bytes.length} bytes.`
+		);
+	}
+	if (bytes[0] !== TRAVEL_HEADER) {
+		throw new TravelTemplateError(
+			`Wrong header byte: expected 0x10 (travel template), got 0x${bytes[0].toString(16).padStart(2, '0')}.`
+		);
+	}
+
+	const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+	let offset = 1;
+	const u16 = (): number => {
+		const v = view.getUint16(offset, true);
+		offset += 2;
+		return v;
+	};
+	const slot = (): TravelSlotPiece => ({
+		skinId: u16(),
+		dyeIds: [u16(), u16(), u16(), u16()]
+	});
+
+	const result = {} as Record<string, TravelSlotPiece>;
+	for (const name of TRAVEL_SLOT_ORDER) {
+		result[name] = slot();
+	}
+
+	const terminator = u16();
+	if (terminator !== TRAVEL_TERMINATOR) {
+		throw new TravelTemplateError(
+			`Bad terminator: expected 0x0FFF, got 0x${terminator.toString(16).padStart(4, '0')}.`
+		);
+	}
+
+	return {
+		...(result as Omit<TravelTemplate, 'raw'>),
+		raw: `[&${bytesToBase64(bytes)}]`
+	};
+}
+
+export function isTravelTemplateCode(input: string): boolean {
+	try {
+		const stripped = stripChatLink(input);
+		const bytes = base64ToBytes(stripped);
+		return bytes.length === TRAVEL_EXPECTED_BYTES && bytes[0] === TRAVEL_HEADER;
+	} catch {
+		return false;
+	}
+}
+
 export function parseItemChatLink(input: string): number | null {
 	try {
 		const stripped = stripChatLink(input);
