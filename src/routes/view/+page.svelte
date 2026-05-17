@@ -3,7 +3,7 @@
 	import { saveOutfit, decodeSharePayload } from '$lib/storage';
 	import { decodeFashionTemplate } from '$lib/gw2/decoder';
 	import TemplateViewer from '$lib/components/TemplateViewer.svelte';
-	import type { FashionTemplate } from '$lib/gw2/types';
+	import type { FashionTemplate, TravelTemplate } from '$lib/gw2/types';
 	import type { OutfitInfusions } from '$lib/storage';
 	import { goto } from '$app/navigation';
 
@@ -15,6 +15,7 @@
 	let gender = $state('');
 	let profession = $state('');
 	let infusions = $state<OutfitInfusions | undefined>(undefined);
+	let travel = $state<TravelTemplate | undefined>(undefined);
 	let error = $state<string | null>(null);
 	let saving = $state(false);
 
@@ -38,6 +39,7 @@
 			gender = payload.gender ?? '';
 			profession = payload.profession ?? '';
 			infusions = payload.infusions ?? undefined;
+			travel = payload.travel ?? undefined;
 		} catch (e) {
 			error = e instanceof Error ? e.message : 'Decode failed.';
 		}
@@ -54,7 +56,8 @@
 				label: '',
 				code: template.raw,
 				imageIds: [],
-				infusions
+				infusions,
+				travel
 			}]
 		});
 		goto(`/outfit/${outfit.id}`);
@@ -97,8 +100,7 @@
 			class="shrink-0 bg-[var(--color-accent)] text-[var(--color-bg)] font-semibold px-4 py-2 rounded text-sm hover:bg-[var(--color-accent-strong)] transition-colors disabled:opacity-50"
 		>{saving ? 'Saving…' : '+ Save to my Armory'}</button>
 	</div>
-	<!-- Read-only view: no onInfusionChange = no editable buttons -->
-	<TemplateViewer {template} {infusions} />
+	<TemplateViewer {template} {infusions} {travel} />
 {:else}
 	<div class="text-[var(--color-text-faint)] text-sm">Loading…</div>
 {/if}

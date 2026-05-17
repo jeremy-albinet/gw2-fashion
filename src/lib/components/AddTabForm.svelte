@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { decodeFashionTemplate, FashionTemplateError, isFashionTemplateCode } from '$lib/gw2/decoder';
+	import { decodeFashionTemplate, FashionTemplateError, isFashionTemplateCode, decodeTravelTemplate, TravelTemplateError, isTravelTemplateCode } from '$lib/gw2/decoder';
 	import CharacterPicker from '$lib/components/CharacterPicker.svelte';
-	import type { FashionTemplate } from '$lib/gw2/types';
+	import type { FashionTemplate, TravelTemplate } from '$lib/gw2/types';
 	import type { Race, Gender, Profession } from '$lib/gw2/constants';
 	import { aggregateInfusions, type OutfitInfusions } from '$lib/storage';
 
@@ -9,7 +9,7 @@
 		onSubmit,
 		onCancel
 	}: {
-		onSubmit: (label: string, code: string, infusions: OutfitInfusions | undefined) => void;
+		onSubmit: (label: string, code: string, infusions: OutfitInfusions | undefined, travel: TravelTemplate | undefined) => void;
 		onCancel: () => void;
 	} = $props();
 
@@ -17,9 +17,12 @@
 	let mode = $state<Mode>('api');
 	let labelInput = $state('');
 	let codeInput = $state('');
+	let travelInput = $state('');
 	let decoded = $state<FashionTemplate | null>(null);
+	let decodedTravel = $state<TravelTemplate | null>(null);
 	let importedInfusions = $state<OutfitInfusions | undefined>(undefined);
 	let error = $state<string | null>(null);
+	let travelError = $state<string | null>(null);
 
 	function handleDecode() {
 		error = null;
@@ -43,6 +46,23 @@
 		}
 	});
 
+	$effect(() => {
+		const trimmed = travelInput.trim();
+		if (!trimmed) { travelError = null; decodedTravel = null; return; }
+		if (isTravelTemplateCode(trimmed)) {
+			try {
+				decodedTravel = decodeTravelTemplate(trimmed);
+				travelError = null;
+			} catch (e) {
+				travelError = e instanceof TravelTemplateError ? e.message : 'Could not decode travel code.';
+				decodedTravel = null;
+			}
+		} else {
+			travelError = 'Not a travel template code.';
+			decodedTravel = null;
+		}
+	});
+
 	function handleCharacterSelect(
 		template: FashionTemplate,
 		_name: string,
@@ -58,7 +78,7 @@
 
 	function submit() {
 		if (!decoded) return;
-		onSubmit(labelInput.trim(), decoded.raw, importedInfusions);
+		onSubmit(labelInput.trim(), decoded.raw, importedInfusions, decodedTravel ?? undefined);
 	}
 
 	const inputClass = "w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-2 text-sm text-[var(--color-text)] placeholder:text-[var(--color-text-faint)] focus:outline-none focus:border-[var(--color-accent)]";
@@ -106,6 +126,18 @@
 		{/if}
 	{:else}
 		<CharacterPicker onSelect={handleCharacterSelect} />
+	{/if}
+
+	<textarea
+		bind:value={travelInput}
+		placeholder="Travel template code [&EA...] — optional"
+		rows="2"
+		class="{inputClass} font-mono resize-none"
+	></textarea>
+	{#if travelError}
+		<div class="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded px-3 py-2">{travelError}</div>
+	{:else if decodedTravel}
+		<div class="text-xs text-green-400/80">✓ Travel template decoded</div>
 	{/if}
 
 	<button

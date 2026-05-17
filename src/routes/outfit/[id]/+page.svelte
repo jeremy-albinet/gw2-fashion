@@ -87,14 +87,15 @@
 		}
 	}
 
-	async function addTab(label: string, code: string, importedInfusions: OutfitInfusions | undefined) {
+	async function addTab(label: string, code: string, importedInfusions: OutfitInfusions | undefined, importedTravel: import('$lib/gw2/types').TravelTemplate | undefined) {
 		if (!outfit) return;
 		const newTab: OutfitTab = {
 			id: crypto.randomUUID(),
 			label,
 			code,
 			imageIds: [],
-			infusions: importedInfusions
+			infusions: importedInfusions,
+			travel: importedTravel
 		};
 		const tabs = [...outfit.tabs, newTab];
 		const updated = await updateOutfit(outfit.id, { tabs, activeTabId: newTab.id });
@@ -305,7 +306,12 @@
 		<ImageGallery imageIds={activeImageIds} />
 	{/if}
 
-	<TemplateViewer {template} {infusions} onInfusionsChange={handleInfusionsChange} />
+	<TemplateViewer
+		{template}
+		{infusions}
+		onInfusionsChange={handleInfusionsChange}
+		travel={activeTab.travel}
+	/>
 
 	<div class="mt-8 border-t border-[var(--color-border)] pt-6">
 		<h2 class="text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest mb-3">Share</h2>
