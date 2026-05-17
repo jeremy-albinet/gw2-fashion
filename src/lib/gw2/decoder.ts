@@ -4,7 +4,6 @@ import type {
 	FashionTemplate,
 	OutfitPiece,
 	VisibilityFlags,
-	WeaponInfusions,
 	WeaponSet,
 	WeaponSlotId
 } from './types';
@@ -49,10 +48,6 @@ function bytesToBase64(bytes: Uint8Array): string {
 	return btoa(bin);
 }
 
-function defaultArmorInfusions(): [number, number, number] {
-	return [0, 0, 0];
-}
-
 export function decodeFashionTemplate(input: string): FashionTemplate {
 	const stripped = stripChatLink(input);
 	if (!stripped) throw new FashionTemplateError('Empty code.');
@@ -87,9 +82,9 @@ export function decodeFashionTemplate(input: string): FashionTemplate {
 
 	const aquabreatherSkin = u16();
 	const armor = {} as Record<ArmorSlotId, ArmorPiece>;
-	armor.aquabreather = { skinId: aquabreatherSkin, dyeIds: [1, 1, 1, 1], infusions: defaultArmorInfusions() };
+	armor.aquabreather = { skinId: aquabreatherSkin, dyeIds: [1, 1, 1, 1] };
 	for (const slot of ARMOR_PARSE_ORDER) {
-		armor[slot] = { skinId: u16(), dyeIds: dyes(), infusions: defaultArmorInfusions() };
+		armor[slot] = { skinId: u16(), dyeIds: dyes() };
 	}
 
 	const outfit: OutfitPiece = { outfitId: u16(), dyeIds: dyes() };
@@ -126,7 +121,6 @@ export function decodeFashionTemplate(input: string): FashionTemplate {
 		armor,
 		outfit,
 		weapons,
-		weaponInfusions: {},
 		visibility,
 		raw: `[&${bytesToBase64(bytes)}]`
 	};
@@ -179,7 +173,7 @@ const API_SLOT_TO_WEAPON: Record<string, WeaponSlotId> = {
 };
 
 function defaultArmorPiece(): ArmorPiece {
-	return { skinId: 0, dyeIds: [1, 1, 1, 1], infusions: defaultArmorInfusions() };
+	return { skinId: 0, dyeIds: [1, 1, 1, 1] };
 }
 
 function defaultVisibility(): VisibilityFlags {
@@ -238,15 +232,21 @@ export function encodeFashionTemplate(t: FashionTemplate): string {
 	return `[&${bytesToBase64(bytes)}]`;
 }
 
-export function equipmentTabToTemplate(tab: Gw2EquipmentTab): FashionTemplate {
+export interface EquipmentImportResult {
+	template: FashionTemplate;
+	/** Flat list of all infusion item IDs collected from every slot in the equipment tab. */
+	infusionItemIds: number[];
+}
+
+export function equipmentTabToTemplate(tab: Gw2EquipmentTab): EquipmentImportResult {
 	const armor: Record<ArmorSlotId, ArmorPiece> = {
 		aquabreather: defaultArmorPiece(), backpack: defaultArmorPiece(),
 		chest: defaultArmorPiece(), boots: defaultArmorPiece(), gloves: defaultArmorPiece(),
 		helmet: defaultArmorPiece(), leggings: defaultArmorPiece(), shoulders: defaultArmorPiece()
 	};
 	const weapons: WeaponSet = { aquaA: 0, aquaB: 0, setA1: 0, setA2: 0, setB1: 0, setB2: 0 };
-	const weaponInfusions: WeaponInfusions = {};
 	const outfit: OutfitPiece = { outfitId: 0, dyeIds: [1, 1, 1, 1] };
+	const infusionItemIds: number[] = [];
 
 	for (const item of tab.equipment) {
 		const armorSlot = API_SLOT_TO_ARMOR[item.slot];
@@ -256,15 +256,12 @@ export function equipmentTabToTemplate(tab: Gw2EquipmentTab): FashionTemplate {
 			const dyeIds: [number, number, number, number] = [
 				raw[0] ?? 1, raw[1] ?? 1, raw[2] ?? 1, raw[3] ?? 1
 			];
-			const inf = item.infusions ?? [];
-			const infusions: [number, number, number] = [inf[0] ?? 0, inf[1] ?? 0, inf[2] ?? 0];
-			armor[armorSlot] = { skinId: item.skin ?? 0, dyeIds, infusions };
+			armor[armorSlot] = { skinId: item.skin ?? 0, dyeIds };
 		} else if (weaponSlot) {
 			weapons[weaponSlot] = item.skin ?? 0;
-			const inf = item.infusions ?? [];
-			if (inf.length > 0) {
-				weaponInfusions[weaponSlot] = [inf[0] ?? 0, inf[1] ?? 0];
-			}
+		}
+		for (const infId of item.infusions ?? []) {
+			if (infId > 0) infusionItemIds.push(infId);
 		}
 	}
 
@@ -272,10 +269,9 @@ export function equipmentTabToTemplate(tab: Gw2EquipmentTab): FashionTemplate {
 		armor,
 		outfit,
 		weapons,
-		weaponInfusions,
 		visibility: defaultVisibility(),
 		raw: ''
 	};
 	template.raw = encodeFashionTemplate(template);
-	return template;
+	return { template, infusionItemIds };
 }

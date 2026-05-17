@@ -6,11 +6,12 @@
 	let { outfit, ondelete }: { outfit: StoredOutfit; ondelete?: () => void } = $props();
 
 	const date = $derived(new Date(outfit.updatedAt).toLocaleDateString());
+	const tabCount = $derived(outfit.tabs?.length ?? 0);
 	let coverUrl = $state<string | null>(null);
 
 	let _coverUrl: string | null = null;
 	onMount(() => {
-		const firstId = outfit.imageIds?.[0];
+		const firstId = outfit.tabs?.flatMap((t) => t.imageIds ?? [])[0];
 		if (firstId) {
 			getImage(firstId).then((blob) => {
 				if (blob) {
@@ -54,6 +55,9 @@
 					{/if}
 					{#if !outfit.profession && !outfit.race}
 						<p class="text-xs text-[var(--color-text-faint)]">{date}</p>
+					{/if}
+					{#if tabCount > 1}
+						<span class="text-[10px] bg-[var(--color-bg-elev)] border border-[var(--color-border)] text-[var(--color-text-dim)] px-1.5 py-0.5 rounded leading-none" title="{tabCount} tabs">⊟ {tabCount}</span>
 					{/if}
 				</div>
 			</div>

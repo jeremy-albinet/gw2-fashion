@@ -11,11 +11,7 @@
 		chatLink: string;
 		category: string;
 		buff: string;
-		attributes: { attribute: string; modifier: number }[];
 	}[];
-
-	const CATEGORIES = ['all', 'infusion', 'enrichment', 'agony', 'defense', 'offense', 'utility', 'other'] as const;
-	type Category = (typeof CATEGORIES)[number];
 
 	let {
 		slotLabel,
@@ -30,17 +26,14 @@
 	} = $props();
 
 	let query = $state('');
-	let category = $state<Category>('all');
 	let pasteInput = $state('');
 	let pasteError = $state('');
 	let pasteLoading = $state(false);
 
 	const filtered = $derived(
 		ALL_INFUSIONS.filter((inf) => {
-			const matchCat = category === 'all' || inf.category === category;
 			const q = query.trim().toLowerCase();
-			const matchQ = !q || inf.name.toLowerCase().includes(q) || inf.buff.toLowerCase().includes(q);
-			return matchCat && matchQ;
+			return !q || inf.name.toLowerCase().includes(q) || inf.buff.toLowerCase().includes(q);
 		})
 	);
 
@@ -143,25 +136,13 @@
 			{/if}
 		</div>
 
-		<!-- Search + filter -->
-		<div class="px-4 py-3 border-b border-[var(--color-border)] shrink-0 space-y-2">
+		<!-- Search -->
+		<div class="px-4 py-3 border-b border-[var(--color-border)] shrink-0">
 			<input
 				bind:value={query}
-				placeholder="Search infusions…"
+				placeholder="Search cosmetic infusions…"
 				class="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-1.5 text-sm text-[var(--color-text)] placeholder:text-[var(--color-text-faint)] focus:outline-none focus:border-[var(--color-accent)]"
 			/>
-			<div class="flex gap-1 flex-wrap">
-				{#each CATEGORIES as cat, _i (_i)}
-					<button
-						type="button"
-						onclick={() => { category = cat; }}
-						class="px-2 py-0.5 rounded text-xs capitalize transition-colors
-							{category === cat
-								? 'bg-[var(--color-accent)] text-[var(--color-bg)] font-semibold'
-								: 'bg-[var(--color-bg-elev)] text-[var(--color-text-dim)] hover:text-[var(--color-text)]'}"
-					>{cat}</button>
-				{/each}
-			</div>
 		</div>
 
 		<!-- List -->
@@ -195,13 +176,8 @@
 							<div class="text-sm text-[var(--color-text)] truncate">{inf.name}</div>
 							{#if inf.buff}
 								<div class="text-xs text-[var(--color-text-faint)] truncate">{inf.buff}</div>
-							{:else if inf.attributes.length > 0}
-								<div class="text-xs text-[var(--color-text-faint)] truncate">
-									{inf.attributes.map((a) => `+${a.modifier} ${a.attribute}`).join(', ')}
-								</div>
 							{/if}
 						</div>
-						<span class="text-xs text-[var(--color-text-faint)] shrink-0 capitalize">{inf.category}</span>
 					</button>
 				{/each}
 			{/if}

@@ -1,628 +1,142 @@
 {
-	"generatedAt": "2026-05-08T16:56:03.171Z",
-	"source": "wiki Category:Infusions + /v2/items",
-	"count": 103,
+	"generatedAt": "2026-05-17T15:28:56.019Z",
+	"source": "wiki Cosmetic_infusion + gw2treasures + /v2/items",
+	"count": 47,
 	"infusions": [
 		{
-			"id": 49424,
-			"name": "+1 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/C605E2EF280B5E4CF9A249E80AB3053843C5EBE3/511839.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEQwQAA]",
-			"category": "infusion",
-			"buff": "+1 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 1
-				}
-			]
-		},
-		{
-			"id": 49433,
-			"name": "+10 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/0C06583A5CC59D4974101F5C0EAFAE7E0C6B5CE7/1465585.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEZwQAA]",
-			"category": "infusion",
-			"buff": "+10 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 10
-				}
-			]
-		},
-		{
-			"id": 49434,
-			"name": "+11 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/3504CD3199285BC1293FAE249ACF9461C50994DB/1465586.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEawQAA]",
-			"category": "infusion",
-			"buff": "+11 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 11
-				}
-			]
-		},
-		{
-			"id": 49435,
-			"name": "+12 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/3504CD3199285BC1293FAE249ACF9461C50994DB/1465586.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEbwQAA]",
-			"category": "infusion",
-			"buff": "+12 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 12
-				}
-			]
-		},
-		{
-			"id": 49436,
-			"name": "+13 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/3504CD3199285BC1293FAE249ACF9461C50994DB/1465586.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEcwQAA]",
-			"category": "infusion",
-			"buff": "+13 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 13
-				}
-			]
-		},
-		{
-			"id": 49437,
-			"name": "+14 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/3504CD3199285BC1293FAE249ACF9461C50994DB/1465586.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEdwQAA]",
-			"category": "infusion",
-			"buff": "+14 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 14
-				}
-			]
-		},
-		{
-			"id": 49438,
-			"name": "+15 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/3504CD3199285BC1293FAE249ACF9461C50994DB/1465586.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEewQAA]",
-			"category": "infusion",
-			"buff": "+15 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 15
-				}
-			]
-		},
-		{
-			"id": 49439,
-			"name": "+16 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/3504CD3199285BC1293FAE249ACF9461C50994DB/1465586.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEfwQAA]",
-			"category": "infusion",
-			"buff": "+16 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 16
-				}
-			]
-		},
-		{
-			"id": 49440,
-			"name": "+17 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/3504CD3199285BC1293FAE249ACF9461C50994DB/1465586.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEgwQAA]",
-			"category": "infusion",
-			"buff": "+17 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 17
-				}
-			]
-		},
-		{
-			"id": 49441,
-			"name": "+18 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/3504CD3199285BC1293FAE249ACF9461C50994DB/1465586.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEhwQAA]",
-			"category": "infusion",
-			"buff": "+18 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 18
-				}
-			]
-		},
-		{
-			"id": 49442,
-			"name": "+19 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/3504CD3199285BC1293FAE249ACF9461C50994DB/1465586.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEiwQAA]",
-			"category": "infusion",
-			"buff": "+19 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 19
-				}
-			]
-		},
-		{
-			"id": 49425,
-			"name": "+2 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/C605E2EF280B5E4CF9A249E80AB3053843C5EBE3/511839.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgERwQAA]",
-			"category": "infusion",
-			"buff": "+2 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 2
-				}
-			]
-		},
-		{
-			"id": 49443,
-			"name": "+20 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/3504CD3199285BC1293FAE249ACF9461C50994DB/1465586.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEjwQAA]",
-			"category": "infusion",
-			"buff": "+20 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 20
-				}
-			]
-		},
-		{
-			"id": 49444,
-			"name": "+21 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/3504CD3199285BC1293FAE249ACF9461C50994DB/1465586.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEkwQAA]",
-			"category": "infusion",
-			"buff": "+21 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 21
-				}
-			]
-		},
-		{
-			"id": 49445,
-			"name": "+22 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/3504CD3199285BC1293FAE249ACF9461C50994DB/1465586.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgElwQAA]",
-			"category": "infusion",
-			"buff": "+22 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 22
-				}
-			]
-		},
-		{
-			"id": 49446,
-			"name": "+23 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/3504CD3199285BC1293FAE249ACF9461C50994DB/1465586.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEmwQAA]",
-			"category": "infusion",
-			"buff": "+23 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 23
-				}
-			]
-		},
-		{
-			"id": 49447,
-			"name": "+24 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/3504CD3199285BC1293FAE249ACF9461C50994DB/1465586.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEnwQAA]",
-			"category": "infusion",
-			"buff": "+24 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 24
-				}
-			]
-		},
-		{
-			"id": 49426,
-			"name": "+3 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/9A137B0106F9DE9A044596FE95C20D072CA093F3/511840.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgESwQAA]",
-			"category": "infusion",
-			"buff": "+3 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 3
-				}
-			]
-		},
-		{
-			"id": 75480,
-			"name": "+3 Simple Infusion",
-			"icon": "https://render.guildwars2.com/file/B4DBD92E63C8B924D0FE00F20AA1E9CE3F1C2436/511849.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgHYJgEA]",
-			"category": "infusion",
-			"buff": "+3 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 3
-				}
-			]
-		},
-		{
-			"id": 49427,
-			"name": "+4 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/9A137B0106F9DE9A044596FE95C20D072CA093F3/511840.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgETwQAA]",
-			"category": "infusion",
-			"buff": "+4 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 4
-				}
-			]
-		},
-		{
-			"id": 49428,
-			"name": "+5 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/AE7C224D02E7F16F19FAFAE1CC50B80E5DC80214/511838.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEUwQAA]",
-			"category": "infusion",
-			"buff": "+5 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 5
-				}
-			]
-		},
-		{
-			"id": 37138,
-			"name": "+5 Simple Infusion",
-			"icon": "https://render.guildwars2.com/file/B4DBD92E63C8B924D0FE00F20AA1E9CE3F1C2436/511849.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgESkQAA]",
-			"category": "infusion",
-			"buff": "+5 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 5
-				}
-			]
-		},
-		{
-			"id": 49429,
-			"name": "+6 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/AE7C224D02E7F16F19FAFAE1CC50B80E5DC80214/511838.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEVwQAA]",
-			"category": "infusion",
-			"buff": "+6 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 6
-				}
-			]
-		},
-		{
-			"id": 49430,
-			"name": "+7 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/F4E1F0BD9E1E08DE0F67146248A9071BE10664A8/1465584.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEWwQAA]",
-			"category": "infusion",
-			"buff": "+7 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 7
-				}
-			]
-		},
-		{
-			"id": 70852,
-			"name": "+7 Simple Infusion",
-			"icon": "https://render.guildwars2.com/file/B4DBD92E63C8B924D0FE00F20AA1E9CE3F1C2436/511849.png",
-			"rarity": "Masterwork",
-			"chatLink": "[&AgHEFAEA]",
-			"category": "infusion",
-			"buff": "+7 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 7
-				}
-			]
-		},
-		{
-			"id": 49431,
-			"name": "+8 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/F4E1F0BD9E1E08DE0F67146248A9071BE10664A8/1465584.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEXwQAA]",
-			"category": "infusion",
-			"buff": "+8 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 8
-				}
-			]
-		},
-		{
-			"id": 49432,
-			"name": "+9 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/0C06583A5CC59D4974101F5C0EAFAE7E0C6B5CE7/1465585.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEYwQAA]",
-			"category": "infusion",
-			"buff": "+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 102084,
-			"name": "Account Swim-Speed Infusion",
-			"icon": "https://render.guildwars2.com/file/6B43B2500AC97D4D1917652444039BD06F94C210/534274.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHEjgEA]",
-			"category": "infusion",
-			"buff": "Increases swim speed by 15%, plus account bonus.\n+5 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 5
-				}
-			]
-		},
-		{
-			"id": 105201,
-			"name": "Amber Agony Lens (Left)",
-			"icon": "https://render.guildwars2.com/file/5D39F52969EAA6139F033CA9F7DDCCA531FEEF94/3690628.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHxmgEA]",
-			"category": "infusion",
-			"buff": "Alters the energy color of the left Eikasia, Mists-Grasper hand.\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 105266,
-			"name": "Amber Agony Lens (Right)",
-			"icon": "https://render.guildwars2.com/file/5D39F52969EAA6139F033CA9F7DDCCA531FEEF94/3690628.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEymwEA]",
-			"category": "infusion",
-			"buff": "Alters the energy color of the right Eikasia, Mists-Grasper hand.\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 105270,
-			"name": "Aureate Agony Lens (Left)",
-			"icon": "https://render.guildwars2.com/file/B36B2C76DF27FD1BF407AAD0113E67CEFBBBE16C/3690625.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgE2mwEA]",
-			"category": "infusion",
-			"buff": "Alters the energy color of the left Eikasia, Mists-Grasper hand.\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 105202,
-			"name": "Aureate Agony Lens (Right)",
-			"icon": "https://render.guildwars2.com/file/B36B2C76DF27FD1BF407AAD0113E67CEFBBBE16C/3690625.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHymgEA]",
-			"category": "infusion",
-			"buff": "Alters the energy color of the right Eikasia, Mists-Grasper hand.\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 105326,
-			"name": "Azure Agony Lens (Left)",
-			"icon": "https://render.guildwars2.com/file/6B172ACC0ACEF2E727E902909C1339F074E4B6A0/3690624.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgFumwEA]",
-			"category": "infusion",
-			"buff": "Alters the energy color of the left Eikasia, Mists-Grasper hand.\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 105228,
-			"name": "Azure Agony Lens (Right)",
-			"icon": "https://render.guildwars2.com/file/6B172ACC0ACEF2E727E902909C1339F074E4B6A0/3690624.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgEMmwEA]",
-			"category": "infusion",
-			"buff": "Alters the energy color of the right Eikasia, Mists-Grasper hand.\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 104566,
-			"name": "Chatoyant Infusion",
-			"icon": "https://render.guildwars2.com/file/352E9C794B0D5B664FF06297D76BA7AF550E4ED4/3601401.png",
+			"id": 94078,
+			"name": "Abyssal Infusion",
+			"icon": "https://render.guildwars2.com/file/F43E6BBFD2FCA496616055ECFD489B6F29F2B30A/2332364.png",
 			"rarity": "Exotic",
-			"chatLink": "[&AgF2mAEA]",
+			"chatLink": "[&AgF+bwEA]",
 			"category": "infusion",
-			"buff": "Causes you to see extra cats.\n+5 Precision\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Precision",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 86986,
-			"name": "Concentration WvW Infusion",
-			"icon": "https://render.guildwars2.com/file/BA9330384DE30525AB3CBE1BA1B7000B336C0FBB/1947210.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgHKUwEA]",
+			"id": 101199,
+			"name": "Arcane Flow Infusion",
+			"icon": "https://render.guildwars2.com/file/A67DC5903C4AAD6AA19EEF6C4B95297D322E4F80/3187595.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgFPiwEA]",
 			"category": "infusion",
-			"buff": "+5 Concentration\n-1% Damage Taken from Guards, Lords, and Supervisors",
-			"attributes": [
-				{
-					"attribute": "BoonDuration",
-					"modifier": 5
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 105208,
-			"name": "Crimson Agony Lens (Left)",
-			"icon": "https://render.guildwars2.com/file/0F1916F8DF9F53B1F3066C0151062E2A0D94DBC1/3690630.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgH4mgEA]",
+			"id": 104357,
+			"name": "Bloodstone Infusion",
+			"icon": "https://render.guildwars2.com/file/52C90A3A3661017CCD375F7EA75A06CA4AD90B96/3592771.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgGllwEA]",
 			"category": "infusion",
-			"buff": "Alters the energy color of the left Eikasia, Mists-Grasper hand.\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 105211,
-			"name": "Crimson Agony Lens (Right)",
-			"icon": "https://render.guildwars2.com/file/0F1916F8DF9F53B1F3066C0151062E2A0D94DBC1/3690630.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgH7mgEA]",
+			"id": 81919,
+			"name": "Celestial Infusion (Blue)",
+			"icon": "https://render.guildwars2.com/file/CDC035E50BDB51A2D14B0840792160620E0FE468/1729286.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgH/PwEA]",
 			"category": "infusion",
-			"buff": "Alters the energy color of the right Eikasia, Mists-Grasper hand.\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87218,
-			"name": "Expertise WvW Infusion",
-			"icon": "https://render.guildwars2.com/file/45F3EB4006E4ADE67703DAE36B429B6EB37AA1C5/1947211.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgGyVAEA]",
+			"id": 81783,
+			"name": "Celestial Infusion (Red)",
+			"icon": "https://render.guildwars2.com/file/E05108050955E3D4A50E9196C8A5CDFFB4D7C891/1729287.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgF3PwEA]",
 			"category": "infusion",
-			"buff": "+5 Expertise\n+1% Damage to Guards, Lords, and Supervisors",
-			"attributes": [
-				{
-					"attribute": "ConditionDuration",
-					"modifier": 5
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
+		},
+		{
+			"id": 81825,
+			"name": "Chak Infusion",
+			"icon": "https://render.guildwars2.com/file/FE73F012119252F1935797B2EC2C94482AB5A308/831485.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgGhPwEA]",
+			"category": "infusion",
+			"buff": "+5 Power\n+9 Agony Resistance"
+		},
+		{
+			"id": 106471,
+			"name": "Chromatic Bubbles",
+			"icon": "https://render.guildwars2.com/file/0CC392B741C82CDCD52A07AF16C66ACE019CBF14/3708953.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgHnnwEA]",
+			"category": "infusion",
+			"buff": "+5 Power\n+9 Agony Resistance"
+		},
+		{
+			"id": 99240,
+			"name": "Clockwork Infusion",
+			"icon": "https://render.guildwars2.com/file/F70CFA060673A89F0FB7FAC69DEAE4B0CF10D066/2778701.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgGogwEA]",
+			"category": "infusion",
+			"buff": "+5 Power\n+9 Agony Resistance"
+		},
+		{
+			"id": 88771,
+			"name": "Crystal Infusion",
+			"icon": "https://render.guildwars2.com/file/A23305DCB835FFA4A42FB3963CE9C6D37D02419E/2038602.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgHDWgEA]",
+			"category": "infusion",
+			"buff": "+5 Power\n+9 Agony Resistance"
+		},
+		{
+			"id": 94543,
+			"name": "Deldrimor Stoneskin Infusion",
+			"icon": "https://render.guildwars2.com/file/0817BB3CE7CA34E2C9C0A759007D57F634D30F9D/2388250.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgFPcQEA]",
+			"category": "infusion",
+			"buff": "+5 Power\n+9 Agony Resistance"
+		},
+		{
+			"id": 107167,
+			"name": "Demonic Infusion",
+			"icon": "https://render.guildwars2.com/file/260CE29FBDEF04E466F555A3CF980561AF2873C5/3744700.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgGfogEA]",
+			"category": "infusion",
+			"buff": "+5 Power\n+9 Agony Resistance"
+		},
+		{
+			"id": 97993,
+			"name": "Echo of the Dragonvoid",
+			"icon": "https://render.guildwars2.com/file/D202AE425233015DF65B77685BF9187B445E9EF1/2672258.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgHJfgEA]",
+			"category": "infusion",
+			"buff": "+5 Power\n+9 Agony Resistance"
+		},
+		{
+			"id": 89060,
+			"name": "Ember Infusion",
+			"icon": "https://render.guildwars2.com/file/23E1D56F0BD61D0958DC60BA770B1DB0AC02270E/2056190.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgHkWwEA]",
+			"category": "infusion",
+			"buff": "+5 Power\n+9 Agony Resistance"
+		},
+		{
+			"id": 106527,
+			"name": "Ethereal Sea-Life Infusion",
+			"icon": "https://render.guildwars2.com/file/DD502051A6C0FA734B9249AEFFCE0E90672F2533/3708954.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgEfoAEA]",
+			"category": "infusion",
+			"buff": "+5 Power\n+9 Agony Resistance"
+		},
+		{
+			"id": 84882,
+			"name": "Festive Confetti Infusion",
+			"icon": "https://render.guildwars2.com/file/00ED7EC9BB0A01045205ED6144FB24E9189B25C2/1822094.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgGSSwEA]",
+			"category": "infusion",
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
 			"id": 104435,
@@ -631,104 +145,34 @@
 			"rarity": "Ascended",
 			"chatLink": "[&AgHzlwEA]",
 			"category": "infusion",
-			"buff": "The forest wisp appears when the mood strikes it!\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
+			"buff": "The forest wisp appears when the mood strikes it!\n+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 39616,
-			"name": "Healing +5 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/79FB4479F4A0E9DB923E48CAB1F777F8F70B974F/511834.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgHAmgAA]",
+			"id": 93829,
+			"name": "Frost Legion Infusion",
+			"icon": "https://render.guildwars2.com/file/3A7D117EDAF805376A78340134062A7170319548/2314088.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgGFbgEA]",
 			"category": "infusion",
-			"buff": "+5 Healing\n+5 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Healing",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 5
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 37123,
-			"name": "Healing +7 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/F4DC0A52220F32D708D574D4E7AC322299FD4754/511836.png",
-			"rarity": "Masterwork",
-			"chatLink": "[&AgEDkQAA]",
+			"id": 77310,
+			"name": "Ghostly Infusion",
+			"icon": "https://render.guildwars2.com/file/297E4B766AFB54E8FBA14A1970A495EAA558F630/1302736.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgH+LQEA]",
 			"category": "infusion",
-			"buff": "+5 Healing\n+7 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Healing",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 7
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 37125,
-			"name": "Healing +9 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/4F62FCB59814EF5F4DFDFBE7C4B6253F31BC587F/1465587.png",
-			"rarity": "Rare",
-			"chatLink": "[&AgEFkQAA]",
+			"id": 91930,
+			"name": "Heart of the Khan-Ur",
+			"icon": "https://render.guildwars2.com/file/02F3397EAE11AB1B48FD4A9A4ECA6B480AA1FF5B/2199305.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgEaZwEA]",
 			"category": "infusion",
-			"buff": "+5 Healing\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Healing",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 39340,
-			"name": "Healing Infusion",
-			"icon": "https://render.guildwars2.com/file/79FB4479F4A0E9DB923E48CAB1F777F8F70B974F/511834.png",
-			"rarity": "Basic",
-			"chatLink": "[&AgGsmQAA]",
-			"category": "infusion",
-			"buff": "+4 Healing",
-			"attributes": [
-				{
-					"attribute": "Healing",
-					"modifier": 4
-				}
-			]
-		},
-		{
-			"id": 43250,
-			"name": "Healing WvW Infusion",
-			"icon": "https://render.guildwars2.com/file/7E12A199E052DB414D2AF309FAB03DAAA0148090/587071.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgHyqAAA]",
-			"category": "infusion",
-			"buff": "+5 Healing\n-1% Damage taken from Guards, Lords, and Supervisors",
-			"attributes": [
-				{
-					"attribute": "Healing",
-					"modifier": 5
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
 			"id": 102508,
@@ -737,880 +181,250 @@
 			"rarity": "Ascended",
 			"chatLink": "[&AgFskAEA]",
 			"category": "infusion",
-			"buff": "Enables the superheated state of the Falling Star spear.\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
+			"buff": "Enables the superheated state of the Falling Star spear.\n+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 39619,
-			"name": "Malign +5 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/110F6F3CCE9129BEA23E0D44754630BCECC90838/511850.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgHDmgAA]",
+			"id": 98153,
+			"name": "Imperial Everbloom",
+			"icon": "https://render.guildwars2.com/file/05A01879A23009F1E1B6D162542EDFB0020A5D25/2685325.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgFpfwEA]",
 			"category": "infusion",
-			"buff": "+5 Condition Damage\n+5 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "ConditionDamage",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 5
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 37129,
-			"name": "Malign +7 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/0C2C363F1A73653E6EFA35B0787880F9F19FBD53/511841.png",
-			"rarity": "Masterwork",
-			"chatLink": "[&AgEJkQAA]",
+			"id": 94929,
+			"name": "Jormag Left Eye Infusion",
+			"icon": "https://render.guildwars2.com/file/E6C14E380D0227433290C80B2DEA0B7F71A2B266/2433076.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgHRcgEA]",
 			"category": "infusion",
-			"buff": "+5 Condition Damage\n+7 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "ConditionDamage",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 7
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 37130,
-			"name": "Malign +9 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/22931193A9D4044C0407BC039902AA0FE0EB0F0A/1465588.png",
-			"rarity": "Rare",
-			"chatLink": "[&AgEKkQAA]",
+			"id": 94946,
+			"name": "Jormag Right Eye Infusion",
+			"icon": "https://render.guildwars2.com/file/3A07E9A22A7BC340A7CD0BAB2C435EDE42F0614D/2433077.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgHicgEA]",
 			"category": "infusion",
-			"buff": "+5 Condition Damage\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "ConditionDamage",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 39337,
-			"name": "Malign Infusion",
-			"icon": "https://render.guildwars2.com/file/110F6F3CCE9129BEA23E0D44754630BCECC90838/511850.png",
-			"rarity": "Basic",
-			"chatLink": "[&AgGpmQAA]",
+			"id": 101276,
+			"name": "Jotun Infusion",
+			"icon": "https://render.guildwars2.com/file/D769C27AC07C46EDFE423023C83B2C1CB5E6CA54/3187594.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgGciwEA]",
 			"category": "infusion",
-			"buff": "+4 Condition Damage",
-			"attributes": [
-				{
-					"attribute": "ConditionDamage",
-					"modifier": 4
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 43253,
-			"name": "Malign WvW Infusion",
-			"icon": "https://render.guildwars2.com/file/CB3B7590105E3EDC390C626735035361990CB1C0/587074.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgH1qAAA]",
+			"id": 81715,
+			"name": "Liquid Aurillium Infusion",
+			"icon": "https://render.guildwars2.com/file/A66CEF1B9C032C240EDB9077FCD53493CD5AC6B9/1203050.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgEzPwEA]",
 			"category": "infusion",
-			"buff": "+5 Condition Damage\n+1% Damage to Guards, Lords, and Supervisors",
-			"attributes": [
-				{
-					"attribute": "ConditionDamage",
-					"modifier": 5
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 39620,
-			"name": "Mighty +5 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/1B18A669E1900107755B12ABAA7DD2071E974C53/511835.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgHEmgAA]",
+			"id": 99789,
+			"name": "Mistwalker Infusion",
+			"icon": "https://render.guildwars2.com/file/C6C9B44F9F460EF806B09729442A94D74CC8FA4C/3072496.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgHNhQEA]",
 			"category": "infusion",
-			"buff": "+5 Power\n+5 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 5
-				}
-			]
+			"buff": "+5 Power\n+1% Damage to Guards, Lords, and Supervisors"
 		},
 		{
-			"id": 37127,
-			"name": "Mighty +7 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/F01F780FFAF267D5B9D593EE0402C9CACFF0A90D/511842.png",
-			"rarity": "Masterwork",
-			"chatLink": "[&AgEHkQAA]",
+			"id": 99878,
+			"name": "Mote of Darkness",
+			"icon": "https://render.guildwars2.com/file/AF08AB9A015CE1DB1F1931B0FEDB9A5D4D16C039/3098410.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgEmhgEA]",
 			"category": "infusion",
-			"buff": "+5 Power\n+7 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 7
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 37131,
-			"name": "Mighty +9 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/139A310703925D3B176BD4EA16B8E511D87A752E/1465589.png",
-			"rarity": "Rare",
-			"chatLink": "[&AgELkQAA]",
-			"category": "infusion",
-			"buff": "+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 39336,
-			"name": "Mighty Infusion",
-			"icon": "https://render.guildwars2.com/file/788067FC2738CF12C248C5E22F3F2717ED5DEB9D/511837.png",
-			"rarity": "Basic",
-			"chatLink": "[&AgGomQAA]",
-			"category": "infusion",
-			"buff": "+4 Power",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 4
-				}
-			]
-		},
-		{
-			"id": 43254,
-			"name": "Mighty WvW Infusion",
-			"icon": "https://render.guildwars2.com/file/F1B068BFD7E6AC11ED90FE09CAB916F6D4DC2C63/587075.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgH2qAAA]",
-			"category": "infusion",
-			"buff": "+5 Power\n+1% Damage to Guards, Lords, and Supervisors",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				}
-			]
-		},
-		{
-			"id": 86338,
-			"name": "Mystical +5 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/79FB4479F4A0E9DB923E48CAB1F777F8F70B974F/511834.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgFCUQEA]",
-			"category": "infusion",
-			"buff": "+5 Concentration\n+5 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "BoonDuration",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 5
-				}
-			]
-		},
-		{
-			"id": 85881,
-			"name": "Mystical +7 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/F4DC0A52220F32D708D574D4E7AC322299FD4754/511836.png",
-			"rarity": "Masterwork",
-			"chatLink": "[&AgF5TwEA]",
-			"category": "infusion",
-			"buff": "+5 Concentration\n+7 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "BoonDuration",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 7
-				}
-			]
-		},
-		{
-			"id": 86180,
-			"name": "Mystical +9 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/4F62FCB59814EF5F4DFDFBE7C4B6253F31BC587F/1465587.png",
-			"rarity": "Rare",
-			"chatLink": "[&AgGkUAEA]",
-			"category": "infusion",
-			"buff": "+5 Concentration\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "BoonDuration",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 39621,
-			"name": "Precise +5 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/57F96C19D8380892B754F776322F30A6EB4EF2B4/511848.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgHFmgAA]",
-			"category": "infusion",
-			"buff": "+5 Precision\n+5 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Precision",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 5
-				}
-			]
-		},
-		{
-			"id": 37128,
-			"name": "Precise +7 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/0750303A4CCEA20E0915BB7FF9CABFFCA0CA2799/511843.png",
-			"rarity": "Masterwork",
-			"chatLink": "[&AgEIkQAA]",
-			"category": "infusion",
-			"buff": "+5 Precision\n+7 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Precision",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 7
-				}
-			]
-		},
-		{
-			"id": 37132,
-			"name": "Precise +9 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/DFFB7C1B1627FBC1B1675BD1F54F0D930BED5B66/1465590.png",
-			"rarity": "Rare",
-			"chatLink": "[&AgEMkQAA]",
-			"category": "infusion",
-			"buff": "+5 Precision\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Precision",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 39335,
-			"name": "Precise Infusion",
-			"icon": "https://render.guildwars2.com/file/B4DBD92E63C8B924D0FE00F20AA1E9CE3F1C2436/511849.png",
-			"rarity": "Basic",
-			"chatLink": "[&AgGnmQAA]",
-			"category": "infusion",
-			"buff": "+4 Precision",
-			"attributes": [
-				{
-					"attribute": "Precision",
-					"modifier": 4
-				}
-			]
-		},
-		{
-			"id": 43255,
-			"name": "Precise WvW Infusion",
-			"icon": "https://render.guildwars2.com/file/A95E4CE2CF099967CA2CED9329C031D2709F62EB/587076.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgH3qAAA]",
-			"category": "infusion",
-			"buff": "+5 Precision\n+1% Damage to Guards, Lords, and Supervisors",
-			"attributes": [
-				{
-					"attribute": "Precision",
-					"modifier": 5
-				}
-			]
-		},
-		{
-			"id": 39617,
-			"name": "Resilient +5 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/4DF43AFD06A460A19C90B011D3157BA969AD21CE/511844.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgHBmgAA]",
-			"category": "infusion",
-			"buff": "+5 Toughness\n+5 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Toughness",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 5
-				}
-			]
-		},
-		{
-			"id": 37133,
-			"name": "Resilient +7 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/D30D629DFA77550B9751AB48B9FCE99D40E056C8/511846.png",
-			"rarity": "Masterwork",
-			"chatLink": "[&AgENkQAA]",
-			"category": "infusion",
-			"buff": "+5 Toughness\n+7 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Toughness",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 7
-				}
-			]
-		},
-		{
-			"id": 37135,
-			"name": "Resilient +9 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/5EA0AE16072E562626C1B8CA62311D987E4938E9/1465591.png",
-			"rarity": "Rare",
-			"chatLink": "[&AgEPkQAA]",
-			"category": "infusion",
-			"buff": "+5 Toughness\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Toughness",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 39339,
-			"name": "Resilient Infusion",
-			"icon": "https://render.guildwars2.com/file/4DF43AFD06A460A19C90B011D3157BA969AD21CE/511844.png",
-			"rarity": "Basic",
-			"chatLink": "[&AgGrmQAA]",
-			"category": "infusion",
-			"buff": "+4 Toughness",
-			"attributes": [
-				{
-					"attribute": "Toughness",
-					"modifier": 4
-				}
-			]
-		},
-		{
-			"id": 43251,
-			"name": "Resilient WvW Infusion",
-			"icon": "https://render.guildwars2.com/file/C0F15CC7A245C804C71F31F6B1037F5B043F3905/587072.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgHzqAAA]",
-			"category": "infusion",
-			"buff": "+5 Toughness\n-1% Damage taken from Guards, Lords, and Supervisors",
-			"attributes": [
-				{
-					"attribute": "Toughness",
-					"modifier": 5
-				}
-			]
-		},
-		{
-			"id": 105214,
-			"name": "Rose Agony Lens (Left)",
-			"icon": "https://render.guildwars2.com/file/3038BB3BCBC97A557DCE04AF34020F38FF175A9F/3690629.png",
+			"id": 78052,
+			"name": "Moto's Unstable Bauble Infusion: Blue",
+			"icon": "https://render.guildwars2.com/file/AE5AE77B1B291BA6A418B9F80B43CF3D437D0806/561983.png",
 			"rarity": "Ascended",
-			"chatLink": "[&AgH+mgEA]",
+			"chatLink": "[&AgHkMAEA]",
 			"category": "infusion",
-			"buff": "Alters the energy color of the left Eikasia, Mists-Grasper hand.\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 105296,
-			"name": "Rose Agony Lens (Right)",
-			"icon": "https://render.guildwars2.com/file/3038BB3BCBC97A557DCE04AF34020F38FF175A9F/3690629.png",
+			"id": 78028,
+			"name": "Moto's Unstable Bauble Infusion: Red",
+			"icon": "https://render.guildwars2.com/file/AE5AE77B1B291BA6A418B9F80B43CF3D437D0806/561983.png",
 			"rarity": "Ascended",
-			"chatLink": "[&AgFQmwEA]",
+			"chatLink": "[&AgHMMAEA]",
 			"category": "infusion",
-			"buff": "Alters the energy color of the right Eikasia, Mists-Grasper hand.\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 85971,
-			"name": "Spiteful +5 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/110F6F3CCE9129BEA23E0D44754630BCECC90838/511850.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgHTTwEA]",
+			"id": 91111,
+			"name": "Mystic Infusion",
+			"icon": "https://render.guildwars2.com/file/DD1E30FED53C992C0679B3A5030FC1B92FE56423/1766870.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgHnYwEA]",
 			"category": "infusion",
-			"buff": "+5 Expertise\n+5 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "ConditionDuration",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 5
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 86150,
-			"name": "Spiteful +7 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/0C2C363F1A73653E6EFA35B0787880F9F19FBD53/511841.png",
-			"rarity": "Masterwork",
-			"chatLink": "[&AgGGUAEA]",
+			"id": 91202,
+			"name": "Peerless Infusion",
+			"icon": "https://render.guildwars2.com/file/07D06928ED0B241D5111B7A8607EFF9BB0329405/2155911.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgFCZAEA]",
 			"category": "infusion",
-			"buff": "+5 Expertise\n+7 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "ConditionDuration",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 7
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 86113,
-			"name": "Spiteful +9 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/22931193A9D4044C0407BC039902AA0FE0EB0F0A/1465588.png",
-			"rarity": "Rare",
-			"chatLink": "[&AgFhUAEA]",
+			"id": 79665,
+			"name": "Phospholuminescent Infusion",
+			"icon": "https://render.guildwars2.com/file/0461C37EFE7D1C507174A226BA34AF160BE5C693/1508108.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgExNwEA]",
 			"category": "infusion",
-			"buff": "+5 Expertise\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "ConditionDuration",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87528,
-			"name": "Swim-Speed Infusion +10",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHoVQEA]",
+			"id": 82013,
+			"name": "Polyluminescent Undulating Infusion (Black)",
+			"icon": "https://render.guildwars2.com/file/B4C6490CAE379BBD90EF68C00A2604477321B468/888378.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgFdQAEA]",
 			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87518,
-			"name": "Swim-Speed Infusion +11",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHeVQEA]",
+			"id": 81678,
+			"name": "Polyluminescent Undulating Infusion (Green)",
+			"icon": "https://render.guildwars2.com/file/97EDAF65FCECF802544DD54B36DC3A09323B254A/888374.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgEOPwEA]",
 			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87493,
-			"name": "Swim-Speed Infusion +12",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHFVQEA]",
+			"id": 81864,
+			"name": "Polyluminescent Undulating Infusion (Orange)",
+			"icon": "https://render.guildwars2.com/file/04050CC5764DC198D8126812E66305C676954F0C/888376.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgHIPwEA]",
 			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87503,
-			"name": "Swim-Speed Infusion +13",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHPVQEA]",
+			"id": 81653,
+			"name": "Polyluminescent Undulating Infusion (Teal)",
+			"icon": "https://render.guildwars2.com/file/7BB3BF57E1060C0A2919290FE03E04BA6B1EE950/1729284.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgH1PgEA]",
 			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87526,
-			"name": "Swim-Speed Infusion +14",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHmVQEA]",
+			"id": 89020,
+			"name": "Polysaturating Reverberating Infusion (Gray)",
+			"icon": "https://render.guildwars2.com/file/7CC8F41D1F3F320FD75F04CDE12E135B9E0F0DBC/2056191.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgG8WwEA]",
 			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87496,
-			"name": "Swim-Speed Infusion +15",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHIVQEA]",
+			"id": 89063,
+			"name": "Polysaturating Reverberating Infusion (Purple)",
+			"icon": "https://render.guildwars2.com/file/6F6759D3E6D043A3DAC3D6F13AE1DA2F7F227C1A/2056192.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgHnWwEA]",
 			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87497,
-			"name": "Swim-Speed Infusion +16",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHJVQEA]",
+			"id": 89059,
+			"name": "Polysaturating Reverberating Infusion (Red)",
+			"icon": "https://render.guildwars2.com/file/F31FD3154C9E41EDB6D124EFEFA2B3F4EA455069/2056193.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgHjWwEA]",
 			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87508,
-			"name": "Swim-Speed Infusion +17",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHUVQEA]",
+			"id": 100008,
+			"name": "Possession Infusion",
+			"icon": "https://render.guildwars2.com/file/02490E0CDED8411FF493FFAE75E35F004723640A/3255340.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgGohgEA]",
 			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87516,
-			"name": "Swim-Speed Infusion +18",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHcVQEA]",
+			"id": 94978,
+			"name": "Primordus Left Eye Infusion",
+			"icon": "https://render.guildwars2.com/file/497107FC62B268BB1453DE39C0D9CC781CE8A80A/2433078.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgECcwEA]",
 			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87532,
-			"name": "Swim-Speed Infusion +19",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHsVQEA]",
+			"id": 94955,
+			"name": "Primordus Right Eye Infusion",
+			"icon": "https://render.guildwars2.com/file/F86B9BD3A92D2D31211274F908F0CC91B0DCD055/2433079.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgHrcgEA]",
 			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87495,
-			"name": "Swim-Speed Infusion +20",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHHVQEA]",
+			"id": 81663,
+			"name": "Queen Bee Infusion",
+			"icon": "https://render.guildwars2.com/file/01C5A7B5B0B01C3605090750B44B760F70C07A05/831489.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgH/PgEA]",
 			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87525,
-			"name": "Swim-Speed Infusion +21",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHlVQEA]",
+			"id": 99940,
+			"name": "Silent Symphony",
+			"icon": "https://render.guildwars2.com/file/30F652F6C3437059309E5D085ABF9C90252B4146/3105954.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgFkhgEA]",
 			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87511,
-			"name": "Swim-Speed Infusion +22",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHXVQEA]",
+			"id": 86401,
+			"name": "Snow Diamond Infusion",
+			"icon": "https://render.guildwars2.com/file/E36E4F18FBF1A3ACEC095F75FAEC1DD937DCFF03/1914822.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgGBUQEA]",
 			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87512,
-			"name": "Swim-Speed Infusion +23",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHYVQEA]",
+			"id": 89401,
+			"name": "Toy-Shell Infusion",
+			"icon": "https://render.guildwars2.com/file/EA2CD818C94A04C3C8E5C9979176FEF421020116/2075492.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgE5XQEA]",
 			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
+			"buff": "+5 Power\n+9 Agony Resistance"
 		},
 		{
-			"id": 87527,
-			"name": "Swim-Speed Infusion +24",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHnVQEA]",
+			"id": 79959,
+			"name": "Winter's Heart Infusion",
+			"icon": "https://render.guildwars2.com/file/EE68160F571F59549B02CA246ED9742CEDCC9AB6/1614397.png",
+			"rarity": "Exotic",
+			"chatLink": "[&AgFXOAEA]",
 			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
-		},
-		{
-			"id": 87502,
-			"name": "Swim-Speed Infusion +25",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHOVQEA]",
-			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
-		},
-		{
-			"id": 87538,
-			"name": "Swim-Speed Infusion +26",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHyVQEA]",
-			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
-		},
-		{
-			"id": 87504,
-			"name": "Swim-Speed Infusion +27",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHQVQEA]",
-			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
-		},
-		{
-			"id": 87535,
-			"name": "Swim-Speed Infusion +28",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHvVQEA]",
-			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
-		},
-		{
-			"id": 87544,
-			"name": "Swim-Speed Infusion +30",
-			"icon": "https://render.guildwars2.com/file/B5C303B0DDD7925DEC9DE039AF50C1570D9A17BF/1983548.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgH4VQEA]",
-			"category": "infusion",
-			"buff": "Increases swimming speed.",
-			"attributes": []
-		},
-		{
-			"id": 105207,
-			"name": "Vanishing Agony Lens (Left)",
-			"icon": "https://render.guildwars2.com/file/6C5B3D5A93B86005937217B60FDFB327A1911D74/3690626.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgH3mgEA]",
-			"category": "infusion",
-			"buff": "Hides the energy of the left Eikasia, Mists-Grasper hand.\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 105168,
-			"name": "Vanishing Agony Lens (Right)",
-			"icon": "https://render.guildwars2.com/file/6C5B3D5A93B86005937217B60FDFB327A1911D74/3690626.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgHQmgEA]",
-			"category": "infusion",
-			"buff": "Hides the energy of the right Eikasia, Mists-Grasper hand.\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 105314,
-			"name": "Viridian Agony Lens (Left)",
-			"icon": "https://render.guildwars2.com/file/91644E9E991058FFE837F5613B3410B0D31CCF53/3690627.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgFimwEA]",
-			"category": "infusion",
-			"buff": "Alters the energy color of the left Eikasia, Mists-Grasper hand.\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 105294,
-			"name": "Viridian Agony Lens (Right)",
-			"icon": "https://render.guildwars2.com/file/91644E9E991058FFE837F5613B3410B0D31CCF53/3690627.png",
-			"rarity": "Ascended",
-			"chatLink": "[&AgFOmwEA]",
-			"category": "infusion",
-			"buff": "Alters the energy color of the right Eikasia, Mists-Grasper hand.\n+5 Power\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Power",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 39618,
-			"name": "Vital +5 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/66EC922E1AA5340FB5A63D997D92655775B524AA/511845.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgHCmgAA]",
-			"category": "infusion",
-			"buff": "+5 Vitality\n+5 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Vitality",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 5
-				}
-			]
-		},
-		{
-			"id": 37134,
-			"name": "Vital +7 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/2990C60568B16D1FC23E602B94D8173B3C6F39C3/511847.png",
-			"rarity": "Masterwork",
-			"chatLink": "[&AgEOkQAA]",
-			"category": "infusion",
-			"buff": "+5 Vitality\n+7 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Vitality",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 7
-				}
-			]
-		},
-		{
-			"id": 37136,
-			"name": "Vital +9 Agony Infusion",
-			"icon": "https://render.guildwars2.com/file/D6207195A66B6A6C6E05ECCC54B601380360CD3E/1465592.png",
-			"rarity": "Rare",
-			"chatLink": "[&AgEQkQAA]",
-			"category": "infusion",
-			"buff": "+5 Vitality\n+9 Agony Resistance",
-			"attributes": [
-				{
-					"attribute": "Vitality",
-					"modifier": 5
-				},
-				{
-					"attribute": "AgonyResistance",
-					"modifier": 9
-				}
-			]
-		},
-		{
-			"id": 39338,
-			"name": "Vital Infusion",
-			"icon": "https://render.guildwars2.com/file/66EC922E1AA5340FB5A63D997D92655775B524AA/511845.png",
-			"rarity": "Basic",
-			"chatLink": "[&AgGqmQAA]",
-			"category": "infusion",
-			"buff": "+4 Vitality",
-			"attributes": [
-				{
-					"attribute": "Vitality",
-					"modifier": 4
-				}
-			]
-		},
-		{
-			"id": 43252,
-			"name": "Vital WvW Infusion",
-			"icon": "https://render.guildwars2.com/file/C6029E732FBF2839F598B6E4D224BDD793241315/587073.png",
-			"rarity": "Fine",
-			"chatLink": "[&AgH0qAAA]",
-			"category": "infusion",
-			"buff": "+5 Vitality\n-1% Damage taken from Guards, Lords, and Supervisors",
-			"attributes": [
-				{
-					"attribute": "Vitality",
-					"modifier": 5
-				}
-			]
+			"buff": "+5 Power\n+9 Agony Resistance"
 		}
 	]
 }

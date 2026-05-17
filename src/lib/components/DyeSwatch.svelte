@@ -2,13 +2,23 @@
 	import type { Gw2Color } from '$lib/gw2/api';
 	import { dyeSwatchRgb } from '$lib/gw2/api';
 
-	let { color, size = 16, width, height }: { color: Gw2Color | undefined; size?: number; width?: number; height?: number } = $props();
+	let {
+		color,
+		size = 16,
+		width,
+		height
+	}: {
+		color: Gw2Color | undefined;
+		size?: number;
+		width?: number;
+		height?: number;
+	} = $props();
 
 	const w = $derived(width ?? size);
 	const h = $derived(height ?? size);
 	const rgb = $derived(color ? dyeSwatchRgb(color) : null);
-	const style = $derived(
-		rgb ? `background:rgb(${rgb[0]},${rgb[1]},${rgb[2]})` : 'background:#3a2f33'
+	const innerStyle = $derived(
+		rgb ? `background:rgb(${rgb[0]},${rgb[1]},${rgb[2]})` : ''
 	);
 
 	let tooltipVisible = $state(false);
@@ -52,12 +62,17 @@
 >
 	<button
 		type="button"
-		class="block rounded-sm border border-white/10 cursor-pointer hover:border-white/40 transition-colors focus:outline-none"
-		style="{style};width:{w}px;height:{h}px"
+		class="block bg-black/60 border-2 border-[rgba(100,100,100,0.8)] cursor-pointer hover:border-[var(--color-accent)] transition-colors focus:outline-none disabled:cursor-default disabled:hover:border-[rgba(100,100,100,0.8)] p-0"
+		style="width:{w}px;height:{h}px"
 		onclick={handleClick}
-		aria-label={color ? `Dye: ${color.name} — click to copy name` : 'Unknown dye'}
-		tabindex="0"
-	></button>
+		disabled={!color}
+		aria-label={color ? `Dye: ${color.name} — click to copy name` : 'Empty dye slot'}
+		tabindex={color ? 0 : -1}
+	>
+		{#if color}
+			<span class="block w-full h-full border border-black/30" style={innerStyle}></span>
+		{/if}
+	</button>
 
 	{#if tooltipVisible && color}
 		<div
@@ -67,7 +82,7 @@
 			role="tooltip"
 		>
 			<div class="flex items-center gap-2 mb-1">
-				<span class="w-4 h-4 rounded-sm border border-white/20 flex-shrink-0" style={style}></span>
+				<span class="w-4 h-4 rounded-sm border border-white/20 flex-shrink-0" style={innerStyle}></span>
 				<p class="text-xs font-semibold text-[var(--color-text)] leading-tight truncate">{color.name}</p>
 			</div>
 			<p class="text-[10px] text-[var(--color-text-faint)] text-center">

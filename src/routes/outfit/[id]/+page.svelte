@@ -4,24 +4,29 @@
 	import { page } from '$app/state';
 	import {
 		getOutfit, updateOutfit, deleteOutfit, encodeSharePayload,
-		saveImage, deleteImages, type StoredOutfit, type OutfitInfusions
+		saveImage, deleteImages, getActiveTab,
+		type StoredOutfit, type OutfitInfusions, type OutfitTab
 	} from '$lib/storage';
 	import { decodeFashionTemplate } from '$lib/gw2/decoder';
 	import TemplateViewer from '$lib/components/TemplateViewer.svelte';
 	import ImageGallery from '$lib/components/ImageGallery.svelte';
 	import ImageUploader from '$lib/components/ImageUploader.svelte';
 	import ExistingImages from '$lib/components/ExistingImages.svelte';
-	import type { FashionTemplate, ArmorSlotId, WeaponSlotId } from '$lib/gw2/types';
+	import OutfitTabs from '$lib/components/OutfitTabs.svelte';
+	import AddTabForm from '$lib/components/AddTabForm.svelte';
+	import type { FashionTemplate } from '$lib/gw2/types';
 	import { RACES, GENDERS, PROFESSIONS, type Race, type Gender, type Profession } from '$lib/gw2/constants';
 
 	const id = $derived(page.params.id ?? '');
 
 	let outfit = $state<StoredOutfit | null>(null);
+	let activeTab = $state<OutfitTab | null>(null);
 	let template = $state<FashionTemplate | null>(null);
-	let infusions = $state<OutfitInfusions>({ armor: {}, weapons: {} });
+	let infusions = $state<OutfitInfusions>({ items: [] });
 	let shareUrl = $state('');
 	let copied = $state(false);
 	let editing = $state(false);
+	let addingTab = $state(false);
 	let editName = $state('');
 	let editRace = $state<Race | ''>('');
 	let editGender = $state<Gender | ''>('');
@@ -32,43 +37,86 @@
 	let editSaving = $state(false);
 	let editError = $state<string | null>(null);
 
-	onMount(async () => {
-		const o = await getOutfit(id);
-		if (!o) { goto('/'); return; }
-		outfit = o;
-		template = decodeFashionTemplate(o.code);
-		infusions = o.infusions ?? { armor: {}, weapons: {} };
+	function loadActiveTab(o: StoredOutfit) {
+		const tab = getActiveTab(o);
+		activeTab = tab;
+		template = decodeFashionTemplate(tab.code);
+		infusions = tab.infusions ?? { items: [] };
 		try {
 			shareUrl = `${window.location.origin}/view#${encodeSharePayload(o)}`;
 		} catch {
 			shareUrl = '';
 		}
+	}
+
+	onMount(async () => {
+		const o = await getOutfit(id);
+		if (!o) { goto('/'); return; }
+		outfit = o;
+		loadActiveTab(o);
 	});
 
-	async function handleInfusionChange(slot: ArmorSlotId | WeaponSlotId, slotIndex: number, itemId: number) {
-		if (!outfit) return;
-		const isWeapon = ['aquaA', 'aquaB', 'setA1', 'setA2', 'setB1', 'setB2'].includes(slot);
-		let updated: OutfitInfusions;
-		if (isWeapon) {
-			const wSlot = slot as WeaponSlotId;
-			const current = infusions.weapons[wSlot] ?? [0, 0];
-			const slots = [...current] as [number, number];
-			slots[slotIndex] = itemId;
-			updated = { ...infusions, weapons: { ...infusions.weapons, [wSlot]: slots } };
-		} else {
-			const aSlot = slot as ArmorSlotId;
-			const current = infusions.armor[aSlot] ?? [0, 0, 0];
-			const slots = [...current] as [number, number, number];
-			slots[slotIndex] = itemId;
-			updated = { ...infusions, armor: { ...infusions.armor, [aSlot]: slots } };
+	async function selectTab(tabId: string) {
+		if (!outfit || tabId === outfit.activeTabId) return;
+		const updated = await updateOutfit(outfit.id, { activeTabId: tabId });
+		if (updated) {
+			outfit = updated;
+			loadActiveTab(updated);
 		}
-		infusions = updated;
-		const hasInfusions =
-			Object.values(updated.armor).some((v) => v?.some((id) => id > 0)) ||
-			Object.values(updated.weapons).some((v) => v?.some((id) => id > 0));
-		const savedOutfit = await updateOutfit(outfit.id, { infusions: hasInfusions ? updated : undefined });
+	}
+
+	async function renameTab(tabId: string, label: string) {
+		if (!outfit) return;
+		const tabs = outfit.tabs.map((t) => t.id === tabId ? { ...t, label } : t);
+		const updated = await updateOutfit(outfit.id, { tabs });
+		if (updated) outfit = updated;
+	}
+
+	async function deleteTab(tabId: string) {
+		if (!outfit || outfit.tabs.length <= 1) return;
+		const tab = outfit.tabs.find((t) => t.id === tabId);
+		if (tab?.imageIds?.length) {
+			await deleteImages(tab.imageIds);
+		}
+		const tabs = outfit.tabs.filter((t) => t.id !== tabId);
+		const newActiveId = outfit.activeTabId === tabId ? tabs[0].id : outfit.activeTabId;
+		const updated = await updateOutfit(outfit.id, { tabs, activeTabId: newActiveId });
+		if (updated) {
+			outfit = updated;
+			loadActiveTab(updated);
+		}
+	}
+
+	async function addTab(label: string, code: string, importedInfusions: OutfitInfusions | undefined) {
+		if (!outfit) return;
+		const newTab: OutfitTab = {
+			id: crypto.randomUUID(),
+			label,
+			code,
+			imageIds: [],
+			infusions: importedInfusions
+		};
+		const tabs = [...outfit.tabs, newTab];
+		const updated = await updateOutfit(outfit.id, { tabs, activeTabId: newTab.id });
+		if (updated) {
+			outfit = updated;
+			loadActiveTab(updated);
+			addingTab = false;
+		}
+	}
+
+	async function handleInfusionsChange(next: OutfitInfusions) {
+		if (!outfit || !activeTab) return;
+		infusions = next;
+		const tabs = outfit.tabs.map((t) =>
+			t.id === activeTab!.id
+				? { ...t, infusions: next.items.length > 0 ? next : undefined }
+				: t
+		);
+		const savedOutfit = await updateOutfit(outfit.id, { tabs });
 		if (savedOutfit) {
 			outfit = savedOutfit;
+			activeTab = getActiveTab(savedOutfit);
 			shareUrl = `${window.location.origin}/view#${encodeSharePayload(savedOutfit)}`;
 		}
 	}
@@ -87,13 +135,17 @@
 	}
 
 	async function saveEdit() {
-		if (!outfit || editSaving) return;
+		if (!outfit || !activeTab || editSaving) return;
 		editSaving = true;
 		editError = null;
 		try {
 			const tags = editTags.split(',').map((t) => t.trim()).filter(Boolean);
 			const newImageIds = await Promise.all(editImages.map((img) => saveImage(img.file)));
-			const imageIds = [...(outfit.imageIds ?? []), ...newImageIds];
+			const tabs = outfit.tabs.map((t) =>
+				t.id === activeTab!.id
+					? { ...t, imageIds: [...(t.imageIds ?? []), ...newImageIds] }
+					: t
+			);
 			const updated = await updateOutfit(outfit.id, {
 				name: editName.trim() || 'Untitled',
 				race: editRace,
@@ -101,9 +153,12 @@
 				profession: editProfession,
 				notes: editNotes.trim(),
 				tags,
-				imageIds
+				tabs
 			});
-			if (updated) outfit = updated;
+			if (updated) {
+				outfit = updated;
+				activeTab = getActiveTab(updated);
+			}
 			editing = false;
 		} catch (e) {
 			editError = e instanceof Error ? e.message : 'Save failed.';
@@ -113,11 +168,18 @@
 	}
 
 	async function removeImage(imageId: string) {
-		if (!outfit) return;
+		if (!outfit || !activeTab) return;
 		await deleteImages([imageId]);
-		const imageIds = (outfit.imageIds ?? []).filter((id) => id !== imageId);
-		const updated = await updateOutfit(outfit.id, { imageIds });
-		if (updated) outfit = updated;
+		const tabs = outfit.tabs.map((t) =>
+			t.id === activeTab!.id
+				? { ...t, imageIds: (t.imageIds ?? []).filter((i) => i !== imageId) }
+				: t
+		);
+		const updated = await updateOutfit(outfit.id, { tabs });
+		if (updated) {
+			outfit = updated;
+			activeTab = getActiveTab(updated);
+		}
 	}
 
 	async function handleDelete() {
@@ -131,13 +193,15 @@
 		copied = true;
 		setTimeout(() => { copied = false; }, 2000);
 	}
+
+	const activeImageIds = $derived(activeTab?.imageIds ?? []);
 </script>
 
 <svelte:head>
 	<title>{outfit?.name ?? 'Outfit'} — GW2 Fashion</title>
 </svelte:head>
 
-{#if !outfit || !template}
+{#if !outfit || !template || !activeTab}
 	<div class="text-[var(--color-text-faint)] text-sm">Loading…</div>
 {:else}
 	<div class="mb-2">
@@ -177,16 +241,16 @@
 				class="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-3 py-2 text-sm text-[var(--color-text)] placeholder:text-[var(--color-text-faint)] focus:outline-none focus:border-[var(--color-accent)]"
 			/>
 
-			{#if (outfit.imageIds?.length ?? 0) > 0}
+			{#if activeImageIds.length > 0}
 				<div>
-					<p class="text-xs text-[var(--color-text-faint)] mb-2">Existing screenshots — click ✕ to remove</p>
-					<ExistingImages imageIds={outfit.imageIds} onRemove={removeImage} />
+					<p class="text-xs text-[var(--color-text-faint)] mb-2">Existing screenshots on this tab — click ✕ to remove</p>
+					<ExistingImages imageIds={activeImageIds} onRemove={removeImage} />
 				</div>
 			{/if}
 
 			<div>
-				<p class="text-xs text-[var(--color-text-faint)] mb-2">Add more screenshots</p>
-				<ImageUploader bind:images={editImages} maxImages={8 - (outfit.imageIds?.length ?? 0)} />
+				<p class="text-xs text-[var(--color-text-faint)] mb-2">Add more screenshots to this tab</p>
+				<ImageUploader bind:images={editImages} maxImages={8 - activeImageIds.length} />
 			</div>
 
 			{#if editError}
@@ -224,11 +288,24 @@
 		</div>
 	{/if}
 
-	{#if (outfit.imageIds?.length ?? 0) > 0}
-		<ImageGallery imageIds={outfit.imageIds} />
+	<OutfitTabs
+		tabs={outfit.tabs}
+		activeId={activeTab.id}
+		onSelect={selectTab}
+		onRename={renameTab}
+		onDelete={deleteTab}
+		onAdd={() => { addingTab = true; }}
+	/>
+
+	{#if addingTab}
+		<AddTabForm onSubmit={addTab} onCancel={() => { addingTab = false; }} />
 	{/if}
 
-	<TemplateViewer {template} {infusions} onInfusionChange={handleInfusionChange} />
+	{#if activeImageIds.length > 0}
+		<ImageGallery imageIds={activeImageIds} />
+	{/if}
+
+	<TemplateViewer {template} {infusions} onInfusionsChange={handleInfusionsChange} />
 
 	<div class="mt-8 border-t border-[var(--color-border)] pt-6">
 		<h2 class="text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest mb-3">Share</h2>
@@ -244,7 +321,7 @@
 			>{copied ? '✓ Copied' : 'Copy link'}</button>
 		</div>
 		<p class="text-xs text-[var(--color-text-faint)] mt-1.5">
-			The share link encodes all data in the URL — no account needed to view it. Images are stored locally only.
+			The share link encodes the active tab only — receivers see exactly what you're viewing now. Images are stored locally only.
 		</p>
 	</div>
 {/if}

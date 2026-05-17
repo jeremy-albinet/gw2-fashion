@@ -11,7 +11,7 @@
 	let {
 		onSelect
 	}: {
-		onSelect: (template: FashionTemplate, name: string, race: Race | '', gender: Gender | '', profession: Profession | '') => void;
+		onSelect: (template: FashionTemplate, name: string, race: Race | '', gender: Gender | '', profession: Profession | '', infusionItemIds: number[]) => void;
 	} = $props();
 
 	let apiKey = $state<string | null>(null);
@@ -71,7 +71,7 @@
 		if (!tab || !apiKey || loadingUse) return;
 		loadingUse = true;
 		try {
-			const template = equipmentTabToTemplate(tab);
+			const { template, infusionItemIds } = equipmentTabToTemplate(tab);
 			const tabLabel = tab.name || `Tab ${tab.tab}`;
 
 			let race: Race | '' = '';
@@ -84,7 +84,7 @@
 				profession = char.profession as Profession;
 			} catch { /* character info is optional */ }
 
-			onSelect(template, `${selectedChar} — ${tabLabel}`, race, gender, profession);
+			onSelect(template, `${selectedChar} — ${tabLabel}`, race, gender, profession, infusionItemIds);
 		} finally {
 			loadingUse = false;
 		}

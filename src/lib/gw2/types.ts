@@ -64,12 +64,7 @@ export const WEAPON_SLOT_LABELS: Record<WeaponSlotId, string> = {
 export interface ArmorPiece {
 	skinId: number;
 	dyeIds: [number, number, number, number];
-	/** Up to 3 infusion item IDs (0 = empty slot). */
-	infusions: [number, number, number];
 }
-
-/** Per-weapon-slot infusion item IDs (up to 2 per weapon). */
-export type WeaponInfusions = Partial<Record<WeaponSlotId, [number, number]>>;
 
 export interface OutfitPiece {
 	outfitId: number;
@@ -100,7 +95,6 @@ export interface FashionTemplate {
 	armor: Record<ArmorSlotId, ArmorPiece>;
 	outfit: OutfitPiece;
 	weapons: WeaponSet;
-	weaponInfusions: WeaponInfusions;
 	visibility: VisibilityFlags;
 	raw: string;
 }

@@ -47,9 +47,15 @@
 		if (!template) return;
 		saving = true;
 		const outfit = await saveOutfit({
-			name, code: template.raw, notes, tags, imageIds: [],
+			name, notes, tags,
 			race: race as '', gender: gender as '', profession: profession as '',
-			infusions
+			tabs: [{
+				id: crypto.randomUUID(),
+				label: '',
+				code: template.raw,
+				imageIds: [],
+				infusions
+			}]
 		});
 		goto(`/outfit/${outfit.id}`);
 	}

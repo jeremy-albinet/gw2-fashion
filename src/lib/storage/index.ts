@@ -1,30 +1,49 @@
 import { get, set, del, keys } from 'idb-keyval';
 import type { Race, Gender, Profession } from '$lib/gw2/constants';
-import type { ArmorSlotId, WeaponSlotId } from '$lib/gw2/types';
 
 const OUTFIT_PREFIX = 'outfit_';
 const IMAGE_PREFIX = 'img_';
 
-/** Infusion slot assignments for an outfit, stored separately from the fashion template code. */
+export interface InfusionEntry {
+	itemId: number;
+	count: number;
+}
+
 export interface OutfitInfusions {
-	armor: Partial<Record<ArmorSlotId, [number, number, number]>>;
-	weapons: Partial<Record<WeaponSlotId, [number, number]>>;
+	items: InfusionEntry[];
+}
+
+export function aggregateInfusions(itemIds: readonly number[]): OutfitInfusions {
+	const counts = new Map<number, number>();
+	for (const id of itemIds) {
+		if (id > 0) counts.set(id, (counts.get(id) ?? 0) + 1);
+	}
+	return { items: [...counts].map(([itemId, count]) => ({ itemId, count })) };
+}
+
+export interface OutfitTab {
+	id: string;
+	label: string;
+	code: string;
+	imageIds: string[];
+	infusions?: OutfitInfusions;
 }
 
 export interface StoredOutfit {
 	id: string;
 	name: string;
-	code: string;
 	race: Race | '';
 	gender: Gender | '';
 	profession: Profession | '';
 	notes: string;
 	tags: string[];
-	imageIds: string[];
-	infusions?: OutfitInfusions;
+	tabs: OutfitTab[];
+	activeTabId?: string;
 	createdAt: number;
 	updatedAt: number;
 }
+
+
 
 function key(id: string): string {
 	return OUTFIT_PREFIX + id;
@@ -42,11 +61,31 @@ function toPlain<T>(value: T): T {
 	return JSON.parse(JSON.stringify(value));
 }
 
+export function getActiveTab(outfit: StoredOutfit): OutfitTab {
+	if (outfit.tabs.length === 0) {
+		throw new Error('Outfit has no tabs');
+	}
+	const found = outfit.activeTabId
+		? outfit.tabs.find((t) => t.id === outfit.activeTabId)
+		: undefined;
+	return found ?? outfit.tabs[0];
+}
+
 export async function saveOutfit(
 	outfit: Omit<StoredOutfit, 'id' | 'createdAt' | 'updatedAt'>
 ): Promise<StoredOutfit> {
 	const now = Date.now();
-	const full: StoredOutfit = toPlain({ ...outfit, id: newId(), createdAt: now, updatedAt: now });
+	const tabs = outfit.tabs.length > 0 ? outfit.tabs : [{
+		id: newId(), label: '', code: '', imageIds: []
+	}];
+	const full: StoredOutfit = toPlain({
+		...outfit,
+		tabs,
+		activeTabId: outfit.activeTabId ?? tabs[0].id,
+		id: newId(),
+		createdAt: now,
+		updatedAt: now
+	});
 	await set(key(full.id), full);
 	return full;
 }
@@ -55,7 +94,7 @@ export async function updateOutfit(
 	id: string,
 	patch: Partial<Omit<StoredOutfit, 'id' | 'createdAt'>>
 ): Promise<StoredOutfit | null> {
-	const existing = await get<StoredOutfit>(key(id));
+	const existing = await getOutfit(id);
 	if (!existing) return null;
 	const updated: StoredOutfit = toPlain({ ...existing, ...patch, id, updatedAt: Date.now() });
 	await set(key(id), updated);
@@ -77,8 +116,9 @@ export async function getAllOutfits(): Promise<StoredOutfit[]> {
 
 export async function deleteOutfit(id: string): Promise<void> {
 	const outfit = await getOutfit(id);
-	if (outfit?.imageIds?.length) {
-		await deleteImages(outfit.imageIds);
+	if (outfit) {
+		const allImageIds = outfit.tabs.flatMap((t) => t.imageIds ?? []);
+		if (allImageIds.length) await deleteImages(allImageIds);
 	}
 	await del(key(id));
 }
@@ -98,17 +138,27 @@ export async function deleteImages(ids: string[]): Promise<void> {
 }
 
 export function encodeSharePayload(outfit: StoredOutfit): string {
+	const tab = getActiveTab(outfit);
 	const json = JSON.stringify({
-		name: outfit.name, code: outfit.code, notes: outfit.notes, tags: outfit.tags,
+		name: outfit.name, code: tab.code, notes: outfit.notes, tags: outfit.tags,
 		race: outfit.race, gender: outfit.gender, profession: outfit.profession,
-		infusions: outfit.infusions ?? null
+		infusions: tab.infusions ?? null
 	});
 	return btoa(unescape(encodeURIComponent(json)));
 }
 
 export function decodeSharePayload(
 	hash: string
-): Pick<StoredOutfit, 'name' | 'code' | 'notes' | 'tags' | 'race' | 'gender' | 'profession' | 'infusions'> | null {
+): {
+	name: string;
+	code: string;
+	notes: string;
+	tags: string[];
+	race: Race | '';
+	gender: Gender | '';
+	profession: Profession | '';
+	infusions?: OutfitInfusions;
+} | null {
 	try {
 		const cleaned = hash.startsWith('#') ? hash.slice(1) : hash;
 		const parsed = JSON.parse(decodeURIComponent(escape(atob(cleaned))));
@@ -143,7 +193,8 @@ export async function exportBackup(): Promise<BackupFile> {
 	const backupOutfits: BackupOutfit[] = await Promise.all(
 		outfits.map(async (o) => {
 			const _images: Record<string, string> = {};
-			for (const imgId of o.imageIds ?? []) {
+			const allImageIds = o.tabs.flatMap((t) => t.imageIds ?? []);
+			for (const imgId of allImageIds) {
 				const blob = await getImage(imgId);
 				if (blob) {
 					const b64 = await new Promise<string>((resolve) => {
@@ -181,21 +232,25 @@ export async function importBackup(
 			continue;
 		}
 
-		const newImageIds: string[] = [];
-		for (const [, dataUrl] of Object.entries(entry._images)) {
+		const idRemap: Record<string, string> = {};
+		for (const [oldId, dataUrl] of Object.entries(entry._images)) {
 			const res = await fetch(dataUrl);
 			const blob = await res.blob();
-			const id = await saveImage(blob);
-			newImageIds.push(id);
+			idRemap[oldId] = await saveImage(blob);
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { _images, ...rest } = entry;
+		const remappedTabs: OutfitTab[] = rest.tabs.map((t: OutfitTab) => ({
+			...t,
+			imageIds: (t.imageIds ?? []).map((oldId: string) => idRemap[oldId]).filter(Boolean)
+		}));
 		const now = Date.now();
 		const outfit: StoredOutfit = {
 			...rest,
-			id: mode === 'replace' ? entry.id : crypto.randomUUID(),
-			imageIds: newImageIds,
+			id: mode === 'replace' ? rest.id : crypto.randomUUID(),
+			tabs: remappedTabs,
+			activeTabId: remappedTabs[0]?.id ?? rest.activeTabId,
 			createdAt: rest.createdAt ?? now,
 			updatedAt: rest.updatedAt ?? now
 		};

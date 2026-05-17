@@ -2,11 +2,11 @@
 	import { goto } from '$app/navigation';
 	import { decodeFashionTemplate, FashionTemplateError } from '$lib/gw2/decoder';
 	import { isFashionTemplateCode } from '$lib/gw2/decoder';
-	import { saveOutfit, saveImage, type OutfitInfusions } from '$lib/storage';
+	import { saveOutfit, saveImage, aggregateInfusions, type OutfitInfusions } from '$lib/storage';
 	import TemplateViewer from '$lib/components/TemplateViewer.svelte';
 	import ImageUploader from '$lib/components/ImageUploader.svelte';
 	import CharacterPicker from '$lib/components/CharacterPicker.svelte';
-	import type { FashionTemplate, ArmorSlotId, WeaponSlotId } from '$lib/gw2/types';
+	import type { FashionTemplate } from '$lib/gw2/types';
 	import { RACES, GENDERS, PROFESSIONS, type Race, type Gender, type Profession } from '$lib/gw2/constants';
 
 	type Tab = 'code' | 'api';
@@ -24,23 +24,10 @@
 	let error = $state<string | null>(null);
 	let saving = $state(false);
 
-	let infusions = $state<OutfitInfusions>({ armor: {}, weapons: {} });
+	let infusions = $state<OutfitInfusions>({ items: [] });
 
-	function handleInfusionChange(slot: ArmorSlotId | WeaponSlotId, slotIndex: number, itemId: number) {
-		const isWeapon = ['aquaA', 'aquaB', 'setA1', 'setA2', 'setB1', 'setB2'].includes(slot);
-		if (isWeapon) {
-			const wSlot = slot as WeaponSlotId;
-			const current = infusions.weapons[wSlot] ?? [0, 0];
-			const updated = [...current] as [number, number];
-			updated[slotIndex] = itemId;
-			infusions = { ...infusions, weapons: { ...infusions.weapons, [wSlot]: updated } };
-		} else {
-			const aSlot = slot as ArmorSlotId;
-			const current = infusions.armor[aSlot] ?? [0, 0, 0];
-			const updated = [...current] as [number, number, number];
-			updated[slotIndex] = itemId;
-			infusions = { ...infusions, armor: { ...infusions.armor, [aSlot]: updated } };
-		}
+	function handleInfusionsChange(next: OutfitInfusions) {
+		infusions = next;
 	}
 
 	function handleDecode() {
@@ -66,24 +53,16 @@
 		}
 	});
 
-	function handleCharacterSelect(template: FashionTemplate, suggestedName: string, race: Race | '', gender: Gender | '', profession: Profession | '') {
+	function handleCharacterSelect(
+		template: FashionTemplate,
+		suggestedName: string,
+		race: Race | '',
+		gender: Gender | '',
+		profession: Profession | '',
+		infusionItemIds: number[]
+	) {
 		decoded = template;
-		// Seed infusions from API import
-		const armorInfusions: OutfitInfusions['armor'] = {};
-		for (const [slot, piece] of Object.entries(template.armor)) {
-			if (piece.infusions.some((id) => id > 0)) {
-				armorInfusions[slot as ArmorSlotId] = piece.infusions;
-			}
-		}
-		const weaponInfusions: OutfitInfusions['weapons'] = {};
-		if (template.weaponInfusions) {
-			for (const [slot, inf] of Object.entries(template.weaponInfusions)) {
-				if (inf && inf.some((id) => id > 0)) {
-					weaponInfusions[slot as WeaponSlotId] = inf as [number, number];
-				}
-			}
-		}
-		infusions = { armor: armorInfusions, weapons: weaponInfusions };
+		infusions = aggregateInfusions(infusionItemIds);
 
 		if (!nameInput) nameInput = suggestedName;
 		if (race) raceInput = race;
@@ -97,19 +76,20 @@
 		try {
 			const tags = tagsInput.split(',').map((t) => t.trim()).filter(Boolean);
 			const imageIds = await Promise.all(images.map((img) => saveImage(img.file)));
-			const hasInfusions =
-				Object.values(infusions.armor).some((v) => v?.some((id) => id > 0)) ||
-				Object.values(infusions.weapons).some((v) => v?.some((id) => id > 0));
 			const outfit = await saveOutfit({
 				name: nameInput.trim() || 'Untitled',
-				code: decoded.raw,
 				race: raceInput,
 				gender: genderInput,
 				profession: professionInput,
 				notes: notesInput.trim(),
 				tags,
-				imageIds,
-				infusions: hasInfusions ? infusions : undefined
+				tabs: [{
+					id: crypto.randomUUID(),
+					label: '',
+					code: decoded.raw,
+					imageIds,
+					infusions: infusions.items.length > 0 ? infusions : undefined
+				}]
 			});
 			goto(`/outfit/${outfit.id}`);
 		} finally {
@@ -204,8 +184,8 @@
 
 				<div class="border-t border-[var(--color-border)] pt-4">
 					<h2 class="text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest mb-3">Preview</h2>
-					<p class="text-xs text-[var(--color-text-faint)] mb-3">Click the small slots on the right of each item to assign infusions.</p>
-					<TemplateViewer template={decoded} {infusions} onInfusionChange={handleInfusionChange} />
+					<p class="text-xs text-[var(--color-text-faint)] mb-3">Use the right column to add infusions.</p>
+					<TemplateViewer template={decoded} {infusions} onInfusionsChange={handleInfusionsChange} />
 				</div>
 
 				<div class="border-t border-[var(--color-border)] pt-4 space-y-4">
