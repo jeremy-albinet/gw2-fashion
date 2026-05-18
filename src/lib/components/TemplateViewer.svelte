@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { FashionTemplate, WeaponSlotId, TravelTemplate } from '$lib/gw2/types';
-	import { ARMOR_DISPLAY_ORDER, ARMOR_SLOT_LABELS, WEAPON_SLOT_LABELS, TRAVEL_SLOT_ORDER, TRAVEL_SLOT_LABELS } from '$lib/gw2/types';
-	import type { Gw2Color, Gw2Skin, Gw2MountSkin, Gw2Glider, Gw2Skiff } from '$lib/gw2/api';
-	import { fetchSkins, fetchColors, fetchMountSkins, fetchGliders, fetchSkiffs } from '$lib/gw2/api';
+	import { ARMOR_DISPLAY_ORDER, ARMOR_SLOT_LABELS, WEAPON_SLOT_LABELS, TRAVEL_SLOT_LABELS, MOUNT_DISPLAY_ORDER } from '$lib/gw2/types';
+	import type { Gw2Color, Gw2Skin, Gw2MountSkin, Gw2Glider } from '$lib/gw2/api';
+	import { fetchSkins, fetchColors, fetchMountSkins, fetchGliders } from '$lib/gw2/api';
 	import type { OutfitInfusions } from '$lib/storage';
 	import EquipmentRow from './EquipmentRow.svelte';
 	import SkinSlot from './SkinSlot.svelte';
@@ -24,7 +24,6 @@
 	let colors = $state<Map<number, Gw2Color>>(new Map());
 	let mountSkinData = $state<Map<number, Gw2MountSkin>>(new Map());
 	let gliderData = $state<Map<number, Gw2Glider>>(new Map());
-	let skiffData = $state<Map<number, Gw2Skiff>>(new Map());
 	let loading = $state(true);
 
 	$effect(() => {
@@ -50,16 +49,14 @@
 	$effect(() => {
 		if (!travel) return;
 
-		const mountSlots = ['jackal', 'griffon', 'springer', 'skimmer', 'raptor', 'roller_beetle', 'warclaw', 'skyscale', 'siege_turtle'] as const;
-		const mountSkinIds = mountSlots.map((k) => travel[k].skinId).filter((id) => id > 0);
+		const mountSkinIds = MOUNT_DISPLAY_ORDER.map((k) => travel[k].skinId).filter((id) => id > 0);
 		if (mountSkinIds.length > 0) fetchMountSkins(mountSkinIds).then((m) => { mountSkinData = m; });
 
 		if (travel.glider.skinId > 0) fetchGliders([travel.glider.skinId]).then((g) => { gliderData = g; });
-		if (travel.skiff.skinId > 0) fetchSkiffs([travel.skiff.skinId]).then((s) => { skiffData = s; });
 
-		const travelDyes = TRAVEL_SLOT_ORDER.flatMap((k) => travel[k].dyeIds).filter((id) => id > 1);
-		if (travelDyes.length > 0) {
-			fetchColors(travelDyes).then((c) => { colors = new Map([...colors, ...c]); });
+		const displayDyes = [...MOUNT_DISPLAY_ORDER, 'glider' as const].flatMap((k) => travel[k].dyeIds).filter((id) => id > 1);
+		if (displayDyes.length > 0) {
+			fetchColors(displayDyes).then((c) => { colors = new Map([...colors, ...c]); });
 		}
 	});
 
@@ -92,27 +89,23 @@
 	const travelRows = $derived<TravelRow[]>(
 		!travel
 			? []
-			: TRAVEL_SLOT_ORDER
+			: MOUNT_DISPLAY_ORDER
 				.map((slotKey): TravelRow | null => {
 					const piece = travel[slotKey];
 					if (piece.skinId === 0) return null;
-					let icon: string | undefined;
-					let name: string | undefined;
-					if (slotKey === 'glider') {
-						const g = gliderData.get(piece.skinId);
-						icon = g?.icon; name = g?.name;
-					} else if (slotKey === 'skiff') {
-						const s = skiffData.get(piece.skinId);
-						icon = s?.icon; name = s?.name;
-					} else if (slotKey === 'doorway') {
-						name = `Doorway #${piece.skinId}`;
-					} else {
-						const m = mountSkinData.get(piece.skinId);
-						icon = m?.icon; name = m?.name;
-					}
-					return { key: slotKey, label: TRAVEL_SLOT_LABELS[slotKey], skinId: piece.skinId, dyeIds: piece.dyeIds, icon, name };
+					const m = mountSkinData.get(piece.skinId);
+					return { key: slotKey, label: TRAVEL_SLOT_LABELS[slotKey], skinId: piece.skinId, dyeIds: piece.dyeIds, icon: m?.icon, name: m?.name };
 				})
 				.filter((r): r is TravelRow => r !== null)
+	);
+
+	const gliderRow = $derived<TravelRow | null>(
+		travel && travel.glider.skinId > 0
+			? (() => {
+				const g = gliderData.get(travel.glider.skinId);
+				return { key: 'glider', label: 'Glider', skinId: travel.glider.skinId, dyeIds: travel.glider.dyeIds, icon: g?.icon, name: g?.name };
+			})()
+			: null
 	);
 
 	let fashionCopied = $state(false);
@@ -141,6 +134,14 @@
 			<div class="flex flex-col gap-1">
 				{#each armorSlots as { slot, label, piece, skin } (slot)}
 					<EquipmentRow {label} {skin} dyeIds={piece.dyeIds} {colors} />
+					{#if slot === 'backpack' && gliderRow}
+						<EquipmentRow
+							label={gliderRow.label}
+							skin={gliderRow.icon ? { id: gliderRow.skinId, name: gliderRow.name ?? gliderRow.label, type: 'glider', icon: gliderRow.icon } : undefined}
+							dyeIds={gliderRow.dyeIds}
+							{colors}
+						/>
+					{/if}
 				{/each}
 				{#if hasOutfit}
 					<EquipmentRow
