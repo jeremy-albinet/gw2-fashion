@@ -128,6 +128,17 @@ export const TRAVEL_SLOT_LABELS: Record<TravelSlotId, string> = {
 	siege_turtle: 'Siege Turtle'
 };
 
+export const MOUNT_DISPLAY_ORDER = [
+	'raptor',
+	'springer',
+	'skimmer',
+	'jackal',
+	'griffon',
+	'roller_beetle',
+	'warclaw',
+	'skyscale',
+] as const satisfies readonly TravelSlotId[];
+
 export interface MountSkinPiece {
 	skinId: number;
 	dyeIds: number[];
